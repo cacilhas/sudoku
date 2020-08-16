@@ -1,0 +1,16 @@
+.*
+*.class
+*.dat
+*.db
+*.idx
+*.iml
+*.jar
+*.versionsBackup
+/project/metals.sbt
+build
+core
+bin/
+nbproject/
+target/
+!.gitignore
+!.gitmodules
