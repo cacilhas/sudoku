@@ -3,7 +3,7 @@ package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 import java.awt._
 import java.awt.event._
 
-import info.cacilhas.kodumaro.sudoku.game.Solver
+import info.cacilhas.kodumaro.sudoku.game.solver.Solver
 import info.cacilhas.kodumaro.sudoku.model.Board
 import info.cacilhas.kodumaro.sudoku.ui.{BoardCanvas, Theme}
 import javax.swing._

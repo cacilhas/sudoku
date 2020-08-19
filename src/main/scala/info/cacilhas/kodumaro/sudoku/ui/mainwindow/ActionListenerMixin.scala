@@ -3,7 +3,8 @@ package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 import java.awt.MenuItem
 import java.awt.event.{ActionEvent, ActionListener}
 
-import info.cacilhas.kodumaro.sudoku.game.{ClassLevel, Loader, Solver}
+import info.cacilhas.kodumaro.sudoku.game.solver.Solver
+import info.cacilhas.kodumaro.sudoku.game.{ClassLevel, Loader}
 
 private[mainwindow] trait ActionListenerMixin {
   this: BoardMixin with FileManagementMixin ⇒

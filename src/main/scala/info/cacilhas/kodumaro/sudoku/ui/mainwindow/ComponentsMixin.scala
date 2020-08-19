@@ -56,6 +56,7 @@ private[mainwindow] trait ComponentsMixin {
 
     mnGame setFont getFont
     mnGame add mnNew
+    mnGame addSeparator()
     mnGame add itSolveFullHouse
     mnGame add itSolveHiddenSingle
 
