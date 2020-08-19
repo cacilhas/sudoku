@@ -6,7 +6,7 @@ sealed trait Solver {def solve(board: Board): Unit}
 
 object Solver {
 
-  val FullHouse: Solver = new Solver {
+  object FullHouse extends Solver {
     override def solve(board: Board): Unit = while (board.hasSingle)
       for (y ← 0 until 9; x ← 0 until 9)
         board(x, y) match {
