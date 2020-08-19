@@ -6,6 +6,7 @@ import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger}
 
 import info.cacilhas.kodumaro.sudoku.model.Board
+import info.cacilhas.kodumaro.sudoku.ui.mainwindow.Window
 
 import concurrent.{Future, blocking}
 import concurrent.ExecutionContext.Implicits._

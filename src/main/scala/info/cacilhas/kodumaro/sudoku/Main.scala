@@ -1,6 +1,6 @@
 package info.cacilhas.kodumaro.sudoku
 
-import info.cacilhas.kodumaro.sudoku.ui.Window
+import info.cacilhas.kodumaro.sudoku.ui.mainwindow.Window
 import javax.swing.UIManager
 
 object Main extends App {

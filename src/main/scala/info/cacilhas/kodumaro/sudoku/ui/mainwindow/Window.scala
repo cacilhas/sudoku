@@ -1,21 +1,21 @@
-package info.cacilhas.kodumaro.sudoku.ui
+package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
 import java.awt._
 import java.awt.event._
 import java.io.{File, PrintWriter}
-import javax.swing._
 
 import info.cacilhas.kodumaro.sudoku.game.{ClassLevel, Loader}
 import info.cacilhas.kodumaro.sudoku.model.Board
+import info.cacilhas.kodumaro.sudoku.ui.{BoardCanvas, Theme}
+import javax.swing._
 
-import io.Source
+import scala.io.Source
 
-class Window extends JFrame {
+class Window extends JFrame with BoardMixin {
   window ⇒
 
   import ClassLevel._
 
-  private var _board: Board = _
   private lazy val homedir = System getProperty "user.home"
   private val theme = Theme(fg = Color.lightGray, bg = Color.black)
   private val dim = new Dimension(724, 800)
@@ -77,8 +77,6 @@ class Window extends JFrame {
   addWindowListener(_windowListener)
   addComponentListener(_componentListener)
 
-  def board: Board = _board
-
   def close(): Unit = dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING))
 
   private lazy val version = Option(getClass.getPackage.getImplementationVersion) getOrElse "1.0"
@@ -96,14 +94,8 @@ class Window extends JFrame {
     )
   }
 
-  private[this] def board_=(board: Board): Unit = {
-    _board = board
+  override protected def onBoardUpdate(): Unit =
     frmBoard.board = board
-    // Force garbage collector to work
-    val rt = Runtime.getRuntime
-    rt gc ()
-    rt runFinalization ()
-  }
 
   private[this] def start(item: MenuItem, action: String, shortcut: Int = -1): Unit = {
     item setFont getFont
