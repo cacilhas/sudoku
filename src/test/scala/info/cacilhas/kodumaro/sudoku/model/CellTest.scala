@@ -10,7 +10,8 @@ class CellTest extends Specification {
       val cell = new Cell
 
       "value must be 0" >> {cell.value must beEqualTo(0)}
-      "done must be false" >> {(cell?) must beFalse}
+      "done must be false" >> {cell.? must beFalse}
+      "not done must be true" >> {cell.!? must beTrue}
       "single must be false" >> {cell.single must beFalse}
       "single value must be none" >> {cell.singleValue must beNone}
     }
@@ -20,7 +21,8 @@ class CellTest extends Specification {
       cell.value = 3
 
       "value must be 3" >> {cell.value must beEqualTo(3)}
-      "done must be true" >> {(cell?) must beTrue}
+      "done must be true" >> {cell.? must beTrue}
+      "not done must be false" >> {cell.!? must beFalse}
       "single must be false" >> {cell.single must beFalse}
       "single value must be 3" >> {cell.singleValue must beSome(3)}
     }
@@ -30,7 +32,8 @@ class CellTest extends Specification {
       cell.value = 10
 
       "value must be 0" >> {cell.value must beEqualTo(0)}
-      "done must be false" >> {(cell?) must beFalse}
+      "done must be false" >> {cell.? must beFalse}
+      "not done must be true" >> {cell.!? must beTrue}
     }
 
     "self single" >> {
@@ -38,7 +41,8 @@ class CellTest extends Specification {
       for (i ← 2 to 9) cell(i) = false
 
       "value must be 0" >> {cell.value must beEqualTo(0)}
-      "done must be false" >> {(cell?) must beFalse}
+      "done must be false" >> {cell.? must beFalse}
+      "not done must be true" >> {cell.!? must beTrue}
       "single must be true" >> {cell.single must beTrue}
       "single value must be 1" >> {cell.singleValue must beSome(1)}
     }

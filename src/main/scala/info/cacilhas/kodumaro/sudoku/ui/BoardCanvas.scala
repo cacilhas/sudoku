@@ -107,7 +107,7 @@ private[ui] class BoardCanvas(window: Window, theme: Theme) extends Canvas {
     private def drawCircles(g: Graphics2D): Unit = if (board != null) {
       val sphere = new Sphere(g)
       for (y ← 0 until 9; x ← 0 until 9) board(x, y) match {
-        case Some(cell) if cell ? ⇒
+        case Some(cell) if cell? ⇒
           sphere draw(x * 80 + 1, y * 80 + 1, 78, colours(cell.value))
 
         case Some(cell) ⇒

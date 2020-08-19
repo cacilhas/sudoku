@@ -18,6 +18,7 @@ private[mainwindow] trait ComponentsMixin {
   private val mnNew = new Menu("New")
   private val mnHelp = new Menu("Help")
   private val itSolveFullHouse = new MenuItem("Solve Full House")
+  private val itSolveHiddenSingle = new MenuItem("Solve Hidden Single")
   private val itOpen = new MenuItem("Open")
   private val itSave = new MenuItem("Save")
   private val itQuit = new MenuItem("Quit")
@@ -35,6 +36,7 @@ private[mainwindow] trait ComponentsMixin {
   start(itSave, "save", VK_S)
   start(itQuit, "quit", VK_Q)
   start(itSolveFullHouse, "solve(FullHouse)")
+  start(itSolveHiddenSingle, "solve(HiddenSingle)")
   start(itAbout, "about")
 
   protected def packComponents(): Unit = {
@@ -55,6 +57,7 @@ private[mainwindow] trait ComponentsMixin {
     mnGame setFont getFont
     mnGame add mnNew
     mnGame add itSolveFullHouse
+    mnGame add itSolveHiddenSingle
 
     getMenuBar add mnFile
     getMenuBar add mnGame

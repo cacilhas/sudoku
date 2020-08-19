@@ -20,16 +20,17 @@ private[mainwindow] trait ActionListenerMixin {
     import ClassLevel._
 
     override def actionPerformed(event: ActionEvent): Unit = event.getActionCommand match {
-      case "quit"             ⇒ close()
-      case "open"             ⇒ open()
-      case "save"             ⇒ save()
-      case "about"            ⇒ about()
-      case "solve(FullHouse)" ⇒ solve(Solver.FullHouse)
-      case "newEasy"          ⇒ board = Loader(Easy)
-      case "newMedium"        ⇒ board = Loader(Medium)
-      case "newHard"          ⇒ board = Loader(Hard)
-      case "newPro"           ⇒ board = Loader(Pro)
-      case _                  ⇒ //
+      case "quit"                ⇒ close()
+      case "open"                ⇒ open()
+      case "save"                ⇒ save()
+      case "about"               ⇒ about()
+      case "solve(FullHouse)"    ⇒ solve(Solver.FullHouse)
+      case "solve(HiddenSingle)" ⇒ solve(Solver.HiddenSingle)
+      case "newEasy"             ⇒ board = Loader(Easy)
+      case "newMedium"           ⇒ board = Loader(Medium)
+      case "newHard"             ⇒ board = Loader(Hard)
+      case "newPro"              ⇒ board = Loader(Pro)
+      case _                     ⇒ //
     }
   }
 }
