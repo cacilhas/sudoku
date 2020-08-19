@@ -11,7 +11,9 @@ import javax.swing._
 
 import scala.io.Source
 
-class Window extends JFrame with BoardMixin {
+final class Window extends JFrame
+                   with BoardMixin
+                   with ActionListenerMixin {
   window ⇒
 
   import ClassLevel._
@@ -77,11 +79,15 @@ class Window extends JFrame with BoardMixin {
   addWindowListener(_windowListener)
   addComponentListener(_componentListener)
 
-  def close(): Unit = dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING))
-
   private lazy val version = Option(getClass.getPackage.getImplementationVersion) getOrElse "1.0"
 
-  private def about(): Unit = {
+  override def close(): Unit = dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING))
+
+  override protected def open(): Unit = fileManager.open
+
+  override protected def save(): Unit = fileManager.save
+
+  override protected def about(): Unit = {
     JOptionPane showMessageDialog (
       window,
       s"""$getTitle $version
@@ -100,7 +106,7 @@ class Window extends JFrame with BoardMixin {
   private[this] def start(item: MenuItem, action: String, shortcut: Int = -1): Unit = {
     item setFont getFont
     item setActionCommand action
-    item addActionListener actionListener
+    addActionListenerTo(item)
     if (shortcut != -1) item setShortcut new MenuShortcut(shortcut)
   }
 
@@ -146,21 +152,6 @@ class Window extends JFrame with BoardMixin {
   /*
    * Listeners
    */
-
-  private object actionListener extends ActionListener {
-
-    override def actionPerformed(event: ActionEvent): Unit = event.getActionCommand match {
-      case "quit"      ⇒ close()
-      case "open"      ⇒ fileManager.open
-      case "save"      ⇒ fileManager.save
-      case "about"     ⇒ about()
-      case "newEasy"   ⇒ board = Loader(Easy)
-      case "newMedium" ⇒ board = Loader(Medium)
-      case "newHard"   ⇒ board = Loader(Hard)
-      case "newPro"    ⇒ board = Loader(Pro)
-      case _           ⇒ //
-    }
-  }
 
   private object _windowListener extends WindowListener {
     override def windowOpened(windowEvent: WindowEvent): Unit = frmBoard start ()
