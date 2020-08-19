@@ -12,7 +12,8 @@ import javax.swing._
 final class Window extends JFrame
                    with BoardMixin
                    with ActionListenerMixin
-                   with FileManagementMixin {
+                   with FileManagementMixin
+                   with WindowListenerMixin {
   window ⇒
 
   import ClassLevel._
@@ -21,7 +22,7 @@ final class Window extends JFrame
   private val dim = new Dimension(724, 800)
 
   // UI components
-  private val frmBoard = new BoardCanvas(window, theme)
+  override protected val frmBoard = new BoardCanvas(window, theme)
   private val mnFile = new Menu("File")
   private val mnNew = new Menu("New")
   private val mnHelp = new Menu("Help")
@@ -74,8 +75,6 @@ final class Window extends JFrame
 
   board = Board()
   add(frmBoard)
-  addWindowListener(_windowListener)
-  addComponentListener(_componentListener)
 
   private lazy val version = Option(getClass.getPackage.getImplementationVersion) getOrElse "1.0"
 
@@ -94,40 +93,12 @@ final class Window extends JFrame
     )
   }
 
-  override protected def onBoardUpdate(): Unit =
-    frmBoard.board = board
+  override protected def onBoardUpdate(): Unit = frmBoard.board = board
 
-  private[this] def start(item: MenuItem, action: String, shortcut: Int = -1): Unit = {
+  private def start(item: MenuItem, action: String, shortcut: Int = -1): Unit = {
     item setFont getFont
     item setActionCommand action
     addActionListenerTo(item)
     if (shortcut != -1) item setShortcut new MenuShortcut(shortcut)
-  }
-
-  /*
-   * Listeners
-   */
-
-  private object _windowListener extends WindowListener {
-    override def windowOpened(windowEvent: WindowEvent): Unit = frmBoard start ()
-
-    override def windowClosing(windowEvent: WindowEvent): Unit = board = null
-
-    override def windowClosed(windowEvent: WindowEvent): Unit = ()
-
-    override def windowIconified(windowEvent: WindowEvent): Unit = frmBoard.board = null
-
-    override def windowDeiconified(windowEvent: WindowEvent): Unit = {
-      frmBoard.board = board
-      frmBoard start ()
-    }
-
-    override def windowActivated(windowEvent: WindowEvent): Unit = frmBoard render ()
-
-    override def windowDeactivated(windowEvent: WindowEvent): Unit = ()
-  }
-
-  private object _componentListener extends ComponentAdapter {
-    override def componentResized(e: ComponentEvent): Unit = frmBoard render ()
   }
 }
