@@ -7,15 +7,13 @@ import info.cacilhas.kodumaro.sudoku.game.ClassLevel
 import info.cacilhas.kodumaro.sudoku.game.Loader
 
 private[mainwindow] trait ActionListenerMixin {
-  this: BoardMixin ⇒
+  this: BoardMixin with FileManagementMixin ⇒
+
+  def close(): Unit
+  protected def about(): Unit
 
   protected def addActionListenerTo(component: MenuItem): Unit =
     component addActionListener actionListener
-
-  def close(): Unit
-  protected def open(): Unit
-  protected def save(): Unit
-  protected def about(): Unit
 
   private object actionListener extends ActionListener {
 

@@ -2,23 +2,21 @@ package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
 import java.awt._
 import java.awt.event._
-import java.io.{File, PrintWriter}
 
-import info.cacilhas.kodumaro.sudoku.game.{ClassLevel, Loader}
+import info.cacilhas.kodumaro.sudoku.game.ClassLevel
 import info.cacilhas.kodumaro.sudoku.model.Board
 import info.cacilhas.kodumaro.sudoku.ui.{BoardCanvas, Theme}
 import javax.swing._
 
-import scala.io.Source
 
 final class Window extends JFrame
                    with BoardMixin
-                   with ActionListenerMixin {
+                   with ActionListenerMixin
+                   with FileManagementMixin {
   window ⇒
 
   import ClassLevel._
 
-  private lazy val homedir = System getProperty "user.home"
   private val theme = Theme(fg = Color.lightGray, bg = Color.black)
   private val dim = new Dimension(724, 800)
 
@@ -83,10 +81,6 @@ final class Window extends JFrame
 
   override def close(): Unit = dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING))
 
-  override protected def open(): Unit = fileManager.open
-
-  override protected def save(): Unit = fileManager.save
-
   override protected def about(): Unit = {
     JOptionPane showMessageDialog (
       window,
@@ -108,45 +102,6 @@ final class Window extends JFrame
     item setActionCommand action
     addActionListenerTo(item)
     if (shortcut != -1) item setShortcut new MenuShortcut(shortcut)
-  }
-
-  object fileManager {
-
-    def save: Unit = try {
-      if (board != null) {
-        val chooser = getChooser
-        if (chooser.showSaveDialog(window) == JFileChooser.APPROVE_OPTION) {
-          val file = chooser.getSelectedFile
-          val writer = new PrintWriter(file)
-          try writer write s"$board"
-          finally writer close ()
-          JOptionPane showMessageDialog (window, s"Board saved to $file", getTitle, JOptionPane.INFORMATION_MESSAGE)
-        }
-      } else
-        JOptionPane showMessageDialog (window, s"No board to save", getTitle, JOptionPane.WARNING_MESSAGE)
-    } catch {
-      case exc: Throwable ⇒
-        JOptionPane showMessageDialog (window, s"Could not save board: $exc", getTitle, JOptionPane.ERROR_MESSAGE)
-    }
-
-    def open: Unit = try {
-      val chooser = getChooser
-      if (chooser.showOpenDialog(window) == JFileChooser.APPROVE_OPTION) {
-        val source = Source fromFile chooser.getSelectedFile
-        try board = Board(source.getLines mkString "\n")
-        finally source.close
-      }
-    } catch {
-      case exc: Throwable ⇒
-        JOptionPane showMessageDialog (window, s"Could not open file: $exc", getTitle, JOptionPane.ERROR_MESSAGE)
-    }
-
-    private def getChooser: JFileChooser = {
-      val chooser = new JFileChooser
-      chooser setCurrentDirectory new File(homedir)
-      chooser setDialogTitle getTitle
-      chooser
-    }
   }
 
   /*
