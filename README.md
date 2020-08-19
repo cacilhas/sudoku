@@ -1,3 +1,4 @@
+[author]: https://github.com/cacilhas/
 [awt]: https://docs.oracle.com/javase/7/docs/api/java/awt/
 [license]: https://github.com/cacilhas/sudoku/blob/master/COPYING
 [linux]: https://www.gnu.org/gnu/linux-and-gnu.en.html
@@ -34,10 +35,12 @@ sbt clean assembly
 
 After this, you can find the uberjar at `target/scala-2.12/kodumaro-sudoku.jar`.
 
-## Author
-
-- [Arĥimedeς ℳontegasppα ℭacilhας](mailto:batalema@cacilhas.info)
+## Copying
 
 ### License
 
 - [The 3-Clause BSD License][license]
+
+### Author
+
+- [Arĥimedeς ℳontegasppα ℭacilhας][author]
