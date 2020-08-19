@@ -1,22 +1,17 @@
 package info.cacilhas.kodumaro.sudoku.model
 
 import java.util.concurrent.Semaphore
-import java.util.concurrent.atomic.AtomicBoolean
 
-import info.cacilhas.kodumaro.sudoku.game.{BoardUpdater, GameChecker}
+import info.cacilhas.kodumaro.sudoku.game.BoardUpdater
 
 import concurrent.{Future, blocking}
 import concurrent.ExecutionContext.Implicits._
-import util.Try
 
 class Board private(val header: String = "% started empty") {
 
   private val cells: Seq[Cell] = for (_ ← 0 until 81) yield new Cell
   private val updater = new BoardUpdater(this)
   private val updateMutex = new Semaphore(1)
-  private val _ok = new AtomicBoolean(true)
-
-  def ok: Boolean = _ok.get
 
   def apply(x: Int, y: Int): Option[Cell] =
     if (0 <= x && x < 9 && 0 <= y && y < 9) Option(cells(x + y*9)) else None
@@ -25,10 +20,11 @@ class Board private(val header: String = "% started empty") {
     cell.value = value
     if (cell.value == value) updater upgrade (x, y, value)
     if (updateMutex.tryAcquire) Future(blocking {
-      Try(_ok set GameChecker.check(this))
       updateMutex release ()
     })
   }
+
+  def hasSingle: Boolean = cells exists {_.single}
 
   override def toString: String = {
     val res = new StringBuilder(header)

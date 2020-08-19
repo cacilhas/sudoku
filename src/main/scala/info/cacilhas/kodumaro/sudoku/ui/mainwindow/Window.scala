@@ -3,6 +3,7 @@ package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 import java.awt._
 import java.awt.event._
 
+import info.cacilhas.kodumaro.sudoku.game.Solver
 import info.cacilhas.kodumaro.sudoku.model.Board
 import info.cacilhas.kodumaro.sudoku.ui.{BoardCanvas, Theme}
 import javax.swing._
@@ -47,6 +48,11 @@ final class Window extends JFrame
       getTitle,
       JOptionPane.INFORMATION_MESSAGE,
     )
+  }
+
+  override protected def solve(solver: Solver): Unit = {
+    solver solve board
+    frmBoard.board = board // force rendering
   }
 
   override protected def onBoardUpdate(): Unit = frmBoard.board = board

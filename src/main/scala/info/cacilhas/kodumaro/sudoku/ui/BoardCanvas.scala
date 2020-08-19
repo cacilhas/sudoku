@@ -89,7 +89,7 @@ private[ui] class BoardCanvas(window: Window, theme: Theme) extends Canvas {
       }
     }
 
-    private def bgColor: Color = if (board.ok) theme.bg else Color.red
+    private def bgColor: Color = theme.bg
 
     private def drawPlayer(g: Graphics2D): Unit = {
       g setColor Color.white

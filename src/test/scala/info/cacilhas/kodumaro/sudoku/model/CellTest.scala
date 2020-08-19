@@ -11,6 +11,8 @@ class CellTest extends Specification {
 
       "value must be 0" >> {cell.value must beEqualTo(0)}
       "done must be false" >> {(cell?) must beFalse}
+      "single must be false" >> {cell.single must beFalse}
+      "single value must be none" >> {cell.singleValue must beNone}
     }
 
     "set value" >> {
@@ -19,6 +21,8 @@ class CellTest extends Specification {
 
       "value must be 3" >> {cell.value must beEqualTo(3)}
       "done must be true" >> {(cell?) must beTrue}
+      "single must be false" >> {cell.single must beFalse}
+      "single value must be 3" >> {cell.singleValue must beSome(3)}
     }
 
     "sef value failed" >> {
@@ -27,6 +31,16 @@ class CellTest extends Specification {
 
       "value must be 0" >> {cell.value must beEqualTo(0)}
       "done must be false" >> {(cell?) must beFalse}
+    }
+
+    "self single" >> {
+      val cell = new Cell
+      for (i ← 2 to 9) cell(i) = false
+
+      "value must be 0" >> {cell.value must beEqualTo(0)}
+      "done must be false" >> {(cell?) must beFalse}
+      "single must be true" >> {cell.single must beTrue}
+      "single value must be 1" >> {cell.singleValue must beSome(1)}
     }
 
     "index" >> {
