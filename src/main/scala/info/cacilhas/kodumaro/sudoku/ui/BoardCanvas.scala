@@ -9,7 +9,7 @@ import ref.WeakReference
 
 private[ui] class BoardCanvas(val window: Window, protected val theme: Theme) extends Canvas with BoardRenderer {
 
-  private var _board: WeakReference[Board] = _
+  private var _board: WeakReference[Board] = new WeakReference(null)
   protected val player = new Player(this)
 
   setSize(720, 720)
@@ -19,10 +19,8 @@ private[ui] class BoardCanvas(val window: Window, protected val theme: Theme) ex
   def board: Board = _board()
 
   def board_=(board: Board): Unit = {
-    Option(_board) foreach {_ clear ()}
-    if (board != null) {
-      _board = new WeakReference(board)
-      render()
-    }
+    _board clear ()
+    _board = new WeakReference(board)
+    render()
   }
 }
