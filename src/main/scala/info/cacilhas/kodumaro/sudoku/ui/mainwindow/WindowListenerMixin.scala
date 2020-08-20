@@ -23,12 +23,9 @@ private[mainwindow] trait WindowListenerMixin {
 
     override def windowClosed(windowEvent: WindowEvent): Unit = ()
 
-    override def windowIconified(windowEvent: WindowEvent): Unit = frmBoard.board = null
+    override def windowIconified(windowEvent: WindowEvent): Unit = ()
 
-    override def windowDeiconified(windowEvent: WindowEvent): Unit = {
-      frmBoard.board = board
-      frmBoard start ()
-    }
+    override def windowDeiconified(windowEvent: WindowEvent): Unit = frmBoard render ()
 
     override def windowActivated(windowEvent: WindowEvent): Unit = frmBoard render ()
 
