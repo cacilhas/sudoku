@@ -1,6 +1,5 @@
 package info.cacilhas.kodumaro.sudoku.ui
 
-import java.awt.event.{KeyEvent, KeyListener}
 import java.awt.{Canvas, Color, Graphics2D}
 import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger}
@@ -13,7 +12,7 @@ import concurrent.ExecutionContext.Implicits._
 import ref.WeakReference
 import util.Try
 
-private[ui] class BoardCanvas(window: Window, theme: Theme) extends Canvas {
+private[ui] class BoardCanvas(val window: Window, theme: Theme) extends Canvas {
 
   private var _board: WeakReference[Board] = _
   private val colours = Seq(
@@ -23,6 +22,7 @@ private[ui] class BoardCanvas(window: Window, theme: Theme) extends Canvas {
     new Color(0x9932cc), new Color(0xe000e0), new Color(0xc0c0c0),
   )
   private val backgrounds = Seq(new Color(0x808080), new Color(0x606060))
+  private val player = new Player(this)
 
   setSize(720, 720)
   theme set this
@@ -56,7 +56,8 @@ private[ui] class BoardCanvas(window: Window, theme: Theme) extends Canvas {
       if (tryAcquire) Future(blocking {
         changed = true
         try while (board != null) {
-          if (window.getKeyListeners.isEmpty) window addKeyListener _keyListener
+          if (window.getKeyListeners.isEmpty)
+            window addKeyListener player.keyListener
           if (changed) render()
           Thread sleep 20 // almost 50 fps
         } finally release
@@ -118,100 +119,5 @@ private[ui] class BoardCanvas(window: Window, theme: Theme) extends Canvas {
         case None ⇒ //
       }
     }
-  }
-
-  private object player {
-    private val _x = new AtomicInteger(4)
-    private val _y = new AtomicInteger(4)
-    private val mutex = new Semaphore(1)
-
-    def x: Int = _x.get
-    def y: Int = _y.get
-
-    def tryAcquire: Boolean = mutex.tryAcquire
-
-    def release(): Unit = mutex release ()
-
-    def incX(value: Int): Unit = {
-      mutex acquire ()
-      try {
-        _x set (9 + x + value) % 9
-        render()
-      } finally release()
-    }
-
-    def incY(value: Int): Unit = {
-      mutex acquire ()
-      try {
-        _y set (9 + y + value) % 9
-        render()
-      } finally release()
-    }
-  }
-
-  private object _keyListener extends KeyListener {
-
-    import KeyEvent._
-
-    override def keyTyped(event: KeyEvent): Unit = ()
-
-    override def keyPressed(event: KeyEvent): Unit = event.getKeyCode match {
-      case VK_LEFT  ⇒ player incX -1
-      case VK_RIGHT ⇒ player incX 1
-      case VK_UP    ⇒ player incY -1
-      case VK_DOWN  ⇒ player incY 1
-      case _ ⇒ //
-    }
-
-    override def keyReleased(event: KeyEvent): Unit = event.getKeyCode match {
-      case VK_ESCAPE  ⇒ window close ()
-
-      case VK_NUMPAD0 |
-           VK_0       ⇒
-        board(player.x, player.y) foreach {_.value = 0}
-        render()
-
-      case keyCode ⇒
-        (keyCode match {
-          case VK_NUMPAD1 |
-               VK_NUMPAD2 |
-               VK_NUMPAD3 |
-               VK_NUMPAD4 |
-               VK_NUMPAD5 |
-               VK_NUMPAD6 |
-               VK_NUMPAD7 |
-               VK_NUMPAD8 |
-               VK_NUMPAD9 ⇒
-            Option(keyCode - VK_NUMPAD0)
-
-          case VK_1 |
-               VK_2 |
-               VK_3 |
-               VK_4 |
-               VK_5 |
-               VK_6 |
-               VK_7 |
-               VK_8 |
-               VK_9 ⇒
-            Option(keyCode - VK_0)
-
-          case _ ⇒ None
-
-        }) match {
-          case Some(num) ⇒
-            board(player.x, player.y) match {
-              case Some(cell) ⇒ unless (cell?) {
-                if (event.isControlDown) cell toggle num
-                else board(player.x, player.y) = num
-                render()
-              }
-              case None ⇒ //
-            }
-
-          case None ⇒ //
-        }
-    }
-
-    private def unless(condition: ⇒ Boolean)(block: ⇒ Any): Unit = if (!condition) block
   }
 }
