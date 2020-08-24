@@ -1,75 +1,99 @@
 package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
-import java.awt.event.KeyEvent
-import java.awt.{Frame, Menu, MenuItem, MenuShortcut}
+import javax.swing.KeyStroke
 
-import info.cacilhas.kodumaro.sudoku.game.ClassLevel
+import info.cacilhas.kodumaro.sudoku.game.{ClassLevel, Loader}
+import info.cacilhas.kodumaro.sudoku.game.solver.Solver
 import info.cacilhas.kodumaro.sudoku.ui.BoardCanvas
 
-private[mainwindow] trait ComponentsMixin {
-  this: Frame with ActionListenerMixin ⇒
+import swing.{Action, Menu, MenuBar, MenuItem, Separator}
 
-  import ClassLevel._
-  import KeyEvent._
+trait ComponentsMixin {
+  window: Window ⇒
 
-  protected def frmBoard: BoardCanvas
-  private val mnFile = new Menu("File")
-  private val mnGame = new Menu("Game")
-  private val mnNew = new Menu("New")
-  private val mnHelp = new Menu("Help")
-  private val itSolveFullHouse = new MenuItem("Solve Full House")
-  private val itSolveHiddenSingle = new MenuItem("Solve Hidden Single")
-  private val itOpen = new MenuItem("Open")
-  private val itSave = new MenuItem("Save")
-  private val itQuit = new MenuItem("Quit")
-  private val itAbout = new MenuItem("About")
-  private val itEasy = new MenuItem(Easy.toString.capitalize)
-  private val itMedium = new MenuItem(Medium.toString.capitalize)
-  private val itHard = new MenuItem(Hard.toString.capitalize)
-  private val itPro = new MenuItem(Pro.toString.capitalize)
+  protected lazy val frmBoard = new BoardCanvas(window, window.theme)
 
-  start(itEasy, "newEasy", VK_E)
-  start(itMedium, "newMedium", VK_N)
-  start(itHard, "newHard", VK_H)
-  start(itPro, "newPro", VK_P)
-  start(itOpen, "open", VK_O)
-  start(itSave, "save", VK_S)
-  start(itQuit, "quit", VK_Q)
-  start(itSolveFullHouse, "solve(FullHouse)")
-  start(itSolveHiddenSingle, "solve(HiddenSingle)")
-  start(itAbout, "about")
+  menuBar = new MenuBar {
+    contents += new Menu("File") {
+      font = window.font
 
-  protected def packComponents(): Unit = {
-    mnNew setFont getFont
-    mnNew add itEasy
-    mnNew add itMedium
-    mnNew add itHard
-    mnNew add itPro
+      contents += new MenuItem(new Action("Open") {
+        accelerator = Some(KeyStroke getKeyStroke "ctrl O")
 
-    mnHelp add itAbout
+        override def apply(): Unit = window openBoard ()
+      }) {font = window.font}
 
-    mnFile setFont getFont
-    mnFile add itOpen
-    mnFile add itSave
-    mnFile addSeparator()
-    mnFile add itQuit
+      contents += new MenuItem(new Action("Save") {
+        accelerator = Some(KeyStroke getKeyStroke "ctrl S")
 
-    mnGame setFont getFont
-    mnGame add mnNew
-    mnGame addSeparator()
-    mnGame add itSolveFullHouse
-    mnGame add itSolveHiddenSingle
+        override def apply(): Unit = window saveBoard ()
+      }) {font = window.font}
 
-    getMenuBar add mnFile
-    getMenuBar add mnGame
-    getMenuBar add mnHelp
-    add(frmBoard)
-  }
+      contents += new Separator
 
-  private def start(item: MenuItem, action: String, shortcut: Int = -1): Unit = {
-    item setFont getFont
-    item setActionCommand action
-    addActionListenerTo(item)
-    if (shortcut != -1) item setShortcut new MenuShortcut(shortcut)
+      contents += new MenuItem(new Action("Quit") {
+        accelerator = Some(KeyStroke getKeyStroke "ctrl Q")
+
+        override def apply(): Unit = window close ()
+      }) {font = window.font}
+    }
+
+    contents += new Menu("Game") {
+      font = window.font
+
+      contents += new Menu("New") {
+        import ClassLevel._
+
+        font = window.font
+
+        contents += new MenuItem(new Action(Easy.toString.capitalize) {
+          accelerator = Some(KeyStroke getKeyStroke "ctrl E")
+          font = window.font
+
+          override def apply(): Unit = board = Loader(Easy)
+        }) {font = window.font}
+
+        contents += new MenuItem(new Action(Medium.toString.capitalize) {
+          accelerator = Some(KeyStroke getKeyStroke "ctrl N")
+          font = window.font
+
+          override def apply(): Unit = board = Loader(Medium)
+        }) {font = window.font}
+
+        contents += new MenuItem(new Action(Hard.toString.capitalize) {
+          accelerator = Some(KeyStroke getKeyStroke "ctrl H")
+          font = window.font
+
+          override def apply(): Unit = board = Loader(Hard)
+        }) {font = window.font}
+
+        contents += new MenuItem(new Action(Pro.toString.capitalize) {
+          accelerator = Some(KeyStroke getKeyStroke "ctrl P")
+          font = window.font
+
+          override def apply(): Unit = board = Loader(Pro)
+        }) {font = window.font}
+      }
+
+      contents += new Separator
+
+      contents += new MenuItem(new Action("Solve Full House") {
+        override def apply(): Unit = solve(Solver.FullHouse)
+      }) {font = window.font}
+
+      contents += new MenuItem(new Action("Solve Hidden Single") {
+        override def apply(): Unit = solve(Solver.HiddenSingle)
+      }) {font = window.font}
+    }
+
+    contents += new Menu("Help") {
+      font = window.font
+
+      contents += new MenuItem(new Action("About") {
+        font = window.font
+
+        override def apply(): Unit = window about ()
+      }) {font = window.font}
+    }
   }
 }

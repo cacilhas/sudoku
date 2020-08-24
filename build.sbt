@@ -16,6 +16,7 @@ Test / envVars ++= Map(
   "TEST" → "1",
 )
 libraryDependencies ++= Seq(
+  "org.scala-lang.modules" %% "scala-swing" % "2.1.1",
   "org.specs2" %% "specs2-core" % "4.10.0" % Test,
 )
 test in assembly := {}
