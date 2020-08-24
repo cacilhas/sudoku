@@ -3,7 +3,7 @@ package info.cacilhas.kodumaro.sudoku.ui
 import java.awt.geom.Point2D
 import java.awt.{Color, Graphics2D,  RadialGradientPaint, RenderingHints}
 
-private[ui] class Sphere(val g: Graphics2D) {
+private class Sphere(val g: Graphics2D) {
 
   g setRenderingHint (RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
 

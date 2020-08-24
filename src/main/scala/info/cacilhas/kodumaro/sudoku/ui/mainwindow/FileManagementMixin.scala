@@ -7,8 +7,8 @@ import javax.swing.{JFileChooser, JFrame, JOptionPane}
 
 import scala.io.Source
 
-private[mainwindow] trait FileManagementMixin {
-  window: JFrame with BoardMixin ⇒
+trait FileManagementMixin {
+  window: Window ⇒
 
   protected def open(): Unit = fileManager.open
 

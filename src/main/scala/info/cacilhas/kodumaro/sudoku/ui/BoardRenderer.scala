@@ -8,20 +8,20 @@ import concurrent.{Future, blocking}
 import concurrent.ExecutionContext.Implicits._
 import util.Try
 
-private[ui] trait BoardRenderer {
+trait BoardRenderer {
   this: BoardCanvas ⇒
 
-  private val colours = Seq(
+  private lazy val colours = Seq(
     theme.bg,
     new Color(0xe00000), new Color(0xe08000), new Color(0xe0e000),
     new Color(0x00e000), new Color(0x0008e0), new Color(0x4b0082),
     new Color(0x9932cc), new Color(0xe000e0), new Color(0xc0c0c0),
   )
-  private val backgrounds = Seq(new Color(0x808080), new Color(0x606060))
+  private lazy val backgrounds = Seq(new Color(0x808080), new Color(0x606060))
 
   def start(): Unit = renderer start ()
 
-  def render(): Unit = renderer.changed = true
+  def renderBoard(): Unit = renderer.changed = true
 
   private object renderer {
 
@@ -37,8 +37,8 @@ private[ui] trait BoardRenderer {
       if (mutex.tryAcquire) Future(blocking {
         changed = true
         try while (board != null) {
-          if (window.getKeyListeners.isEmpty)
-            window addKeyListener player.keyListener
+          if (window.peer.getKeyListeners.isEmpty)
+            window.peer addKeyListener player.keyListener
           if (changed) render()
           Thread sleep 20 // almost 50 fps
         } finally mutex release ()

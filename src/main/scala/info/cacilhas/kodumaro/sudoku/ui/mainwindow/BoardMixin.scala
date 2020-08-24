@@ -2,7 +2,7 @@ package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
 import info.cacilhas.kodumaro.sudoku.model.Board
 
-private[mainwindow] trait BoardMixin {
+trait BoardMixin {
 
   private var _board: Board = _
 

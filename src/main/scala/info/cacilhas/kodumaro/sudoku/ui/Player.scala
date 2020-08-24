@@ -4,7 +4,7 @@ import java.awt.event.{KeyEvent, KeyListener}
 import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.AtomicInteger
 
-private[ui] class Player(parent: BoardCanvas) {
+class Player(parent: BoardCanvas) {
   player ⇒
 
   private val _x = new AtomicInteger(4)
@@ -22,7 +22,7 @@ private[ui] class Player(parent: BoardCanvas) {
     mutex acquire ()
     try {
       _x set (9 + x + value) % 9
-      parent render ()
+      parent renderBoard ()
     } finally release()
   }
 
@@ -30,7 +30,7 @@ private[ui] class Player(parent: BoardCanvas) {
     mutex acquire ()
     try {
       _y set (9 + y + value) % 9
-      parent render ()
+      parent renderBoard ()
     } finally release()
   }
 
@@ -54,7 +54,7 @@ private[ui] class Player(parent: BoardCanvas) {
       case VK_NUMPAD0 |
            VK_0       ⇒
         parent board (player.x, player.y) foreach {_.value = 0}
-        parent render ()
+        parent renderBoard ()
 
       case keyCode ⇒
         (keyCode match {
@@ -88,7 +88,7 @@ private[ui] class Player(parent: BoardCanvas) {
               case Some(cell) ⇒ unless (cell?) {
                 if (event.isControlDown) cell toggle num
                 else parent board (player.x, player.y) = num
-                parent render ()
+                parent renderBoard ()
               }
               case None ⇒ //
             }
