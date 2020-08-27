@@ -1,19 +1,17 @@
 package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
-import java.awt.event.{ComponentEvent, ComponentListener}
 import java.awt.{Color, Dimension, Font}
 import java.util.concurrent.atomic.AtomicBoolean
 
 import info.cacilhas.kodumaro.sudoku.ui.Theme
 
-import swing.event.{WindowActivated, WindowClosed, WindowClosing}
+import swing.event.{UIElementResized, WindowActivated, WindowClosed}
 import swing._
 
 final class Window extends Frame
                    with BoardMixin
                    with FileManagementMixin
-                   with RendererMixin {
-  window ⇒
+                   with RendererMixin { window ⇒
 
   val mustRender: AtomicBoolean = new AtomicBoolean(true)
   val theme: Theme = Theme(
@@ -32,21 +30,17 @@ final class Window extends Frame
   menuBar = MenuBuilder(window)
 
   contents = new GridBagPanel {
-    layout(player) = new Constraints {fill = GridBagPanel.Fill.Both}
+    import GridBagPanel.Fill._
+
+    layout(player) = new Constraints {fill = Both}
     theme set this
+    window listenTo this
   }
 
   reactions += {
     case WindowActivated(`window`) ⇒ renderer start ()
     case WindowClosed(`window`)    ⇒ board = None
-  }
-
-  // FIXME: how to create a window-resized reaction?
-  peer addComponentListener new ComponentListener {
-    override def componentResized(componentEvent: ComponentEvent): Unit = mustRender set true
-    override def componentMoved(componentEvent: ComponentEvent): Unit = ()
-    override def componentShown(componentEvent: ComponentEvent): Unit = ()
-    override def componentHidden(componentEvent: ComponentEvent): Unit = ()
+    case UIElementResized(_)       ⇒ mustRender set true
   }
 
   def about(): Unit = {

@@ -10,8 +10,7 @@ import scala.concurrent.{ExecutionContext, Future, blocking}
 import scala.swing.Graphics2D
 import scala.util.Try
 
-trait RendererMixin {
-  window: Window ⇒
+trait RendererMixin { window: Window ⇒
 
   protected lazy val player = new Player(this)
 
