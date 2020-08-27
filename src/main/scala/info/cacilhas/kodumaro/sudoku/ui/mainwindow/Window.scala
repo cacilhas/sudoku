@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import info.cacilhas.kodumaro.sudoku.ui.Theme
 
-import swing.event.WindowActivated
+import swing.event.{WindowActivated, WindowClosed, WindowClosing}
 import swing._
 
 final class Window extends Frame
@@ -33,9 +33,13 @@ final class Window extends Frame
 
   contents = new GridBagPanel {
     layout(player) = new Constraints {fill = GridBagPanel.Fill.Both}
+    theme set this
   }
-  contents foreach {theme set}
-  reactions += {case WindowActivated(`window`) ⇒ renderer start ()}
+
+  reactions += {
+    case WindowActivated(`window`) ⇒ renderer start ()
+    case WindowClosed(`window`)    ⇒ board = None
+  }
 
   // FIXME: how to create a window-resized reaction?
   peer addComponentListener new ComponentListener {
@@ -59,7 +63,6 @@ final class Window extends Frame
   }
 
   override def close(): Unit = {
-    board = None
     super.close()
     dispose()
   }
