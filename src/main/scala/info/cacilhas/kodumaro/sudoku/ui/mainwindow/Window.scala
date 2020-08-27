@@ -1,11 +1,11 @@
 package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
 import java.awt.{Color, Dimension, Font, GridBagLayout}
-import java.util.concurrent.atomic.{AtomicBoolean}
+import java.util.concurrent.atomic.AtomicBoolean
 
 import info.cacilhas.kodumaro.sudoku.game.{ClassLevel, Loader}
 import info.cacilhas.kodumaro.sudoku.game.solver.Solver
-import info.cacilhas.kodumaro.sudoku.ui.{Player, Theme}
+import info.cacilhas.kodumaro.sudoku.ui.Theme
 import javax.swing.KeyStroke
 
 import scala.swing.event.WindowActivated
