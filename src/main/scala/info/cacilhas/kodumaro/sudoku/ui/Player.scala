@@ -4,7 +4,9 @@ import java.awt.event.{KeyEvent, KeyListener}
 import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.AtomicInteger
 
-class Player(parent: BoardCanvas) {
+import info.cacilhas.kodumaro.sudoku.ui.mainwindow.Window
+
+class Player(parent: Window) {
   player ⇒
 
   private val _x = new AtomicInteger(4)
@@ -22,7 +24,7 @@ class Player(parent: BoardCanvas) {
     mutex acquire ()
     try {
       _x set (9 + x + value) % 9
-      parent renderBoard ()
+      parent.mustRender set true
     } finally release()
   }
 
@@ -30,7 +32,7 @@ class Player(parent: BoardCanvas) {
     mutex acquire ()
     try {
       _y set (9 + y + value) % 9
-      parent renderBoard ()
+      parent.mustRender set true
     } finally release()
   }
 
@@ -49,12 +51,12 @@ class Player(parent: BoardCanvas) {
     }
 
     override def keyReleased(event: KeyEvent): Unit = event.getKeyCode match {
-      case VK_ESCAPE  ⇒ parent.window close ()
+      case VK_ESCAPE  ⇒ parent close ()
 
       case VK_NUMPAD0 |
            VK_0       ⇒
         parent board (player.x, player.y) foreach {_.value = 0}
-        parent renderBoard ()
+        parent.mustRender set true
 
       case keyCode ⇒
         (keyCode match {
@@ -88,7 +90,7 @@ class Player(parent: BoardCanvas) {
               case Some(cell) ⇒ unless (cell?) {
                 if (event.isControlDown) cell toggle num
                 else parent board (player.x, player.y) = num
-                parent renderBoard ()
+                parent.mustRender set true
               }
               case None ⇒ //
             }

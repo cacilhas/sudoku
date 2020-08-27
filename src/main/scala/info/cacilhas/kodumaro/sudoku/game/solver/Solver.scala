@@ -6,6 +6,6 @@ sealed trait Solver {def solve(board: Board): Unit}
 
 object Solver {
 
-  object FullHouse extends Solver with FullHouseSolver
-  object HiddenSingle extends Solver with HiddenSingleSolver
+  object FullHouse extends Solver with FullHouseSolver {override def toString: String = "Solve Full House"}
+  object HiddenSingle extends Solver with HiddenSingleSolver {override def toString: String = "Solve Hidden Single"}
 }
