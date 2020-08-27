@@ -24,7 +24,7 @@ class Player(window: Window) extends Component {
 
   override def paint(g: Graphics2D): Unit = {
     g setColor Color.white
-    g drawRect(x*80, y*80 + window.offset.y, 80, 80)
+    g drawRect(x*80 + window.offset.x, y*80 + window.offset.y, 80, 80)
   }
 
   def tryAcquire: Boolean = mutex.tryAcquire

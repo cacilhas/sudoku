@@ -23,7 +23,7 @@ final class Window extends Frame
   private lazy val version = Option(getClass.getPackage.getImplementationVersion) getOrElse "1.0"
 
   title = "Kodumaro Sudoku"
-  size = new Dimension(720, 720 + offset.y)
+  size = new Dimension(720 + offset.x, 720 + offset.y)
   minimumSize = size
   theme set window
   centerOnScreen()
