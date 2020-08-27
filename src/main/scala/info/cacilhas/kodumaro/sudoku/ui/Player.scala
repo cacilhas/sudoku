@@ -1,18 +1,31 @@
 package info.cacilhas.kodumaro.sudoku.ui
 
-import java.awt.event.{KeyEvent, KeyListener}
+import java.awt.Color
 import java.util.concurrent.Semaphore
 import java.util.concurrent.atomic.AtomicInteger
 
-private[ui] class Player(parent: BoardCanvas) {
-  player ⇒
+import info.cacilhas.kodumaro.sudoku.ui.mainwindow.Window
+
+import swing.{Component, Graphics2D, Reactions}
+import swing.event.Key.Modifier
+import swing.event.{Key, KeyPressed, KeyReleased}
+
+class Player(window: Window) extends Component {
 
   private val _x = new AtomicInteger(4)
   private val _y = new AtomicInteger(4)
   private val mutex = new Semaphore(1)
 
+  focusable = true
+  listenTo(keys)
+
   def x: Int = _x.get
   def y: Int = _y.get
+
+  override def paint(g: Graphics2D): Unit = {
+    g setColor Color.white
+    g drawRect(x*80, y*80 + window.yOffset, 80, 80)
+  }
 
   def tryAcquire: Boolean = mutex.tryAcquire
 
@@ -22,7 +35,7 @@ private[ui] class Player(parent: BoardCanvas) {
     mutex acquire ()
     try {
       _x set (9 + x + value) % 9
-      parent render ()
+      window.mustRender set true
     } finally release()
   }
 
@@ -30,73 +43,72 @@ private[ui] class Player(parent: BoardCanvas) {
     mutex acquire ()
     try {
       _y set (9 + y + value) % 9
-      parent render ()
+      window.mustRender set true
     } finally release()
   }
 
-  object keyListener extends KeyListener {
+  reactions += {
+    val reactions = new Reactions.Impl
+    reactions += {
+      case KeyPressed(_, Key.Left, _, _)     ⇒ incX(-1)
+      case KeyPressed(_, Key.Right, _, _)    ⇒ incX(1)
+      case KeyPressed(_, Key.Up, _, _)       ⇒ incY(-1)
+      case KeyPressed(_, Key.Down, _, _)     ⇒ incY(1)
+      case KeyReleased(_, Key.Escape, _, _)  ⇒ window close ()
+      case KeyReleased(_, Key.Numpad0, _, _) |
+           KeyReleased(_, Key.Key0, _, _)    ⇒
+        window.board foreach {_ (x, y) foreach {_.value = 0}}
+        window.mustRender set true
 
-    import KeyEvent._
+      case KeyReleased(_, key, modifiers, _) ⇒ key match {
+        case key ⇒
+          (key match {
+            case Key.Numpad1 |
+                 Key.Numpad2 |
+                 Key.Numpad3 |
+                 Key.Numpad4 |
+                 Key.Numpad5 |
+                 Key.Numpad6 |
+                 Key.Numpad7 |
+                 Key.Numpad8 |
+                 Key.Numpad9 ⇒
+              Option(key.id - Key.Numpad0.id)
 
-    override def keyTyped(event: KeyEvent): Unit = ()
+            case Key.Key1 |
+                 Key.Key2 |
+                 Key.Key3 |
+                 Key.Key4 |
+                 Key.Key5 |
+                 Key.Key6 |
+                 Key.Key7 |
+                 Key.Key8 |
+                 Key.Key9 ⇒
+              Option(key.id - Key.Key0.id)
 
-    override def keyPressed(event: KeyEvent): Unit = event.getKeyCode match {
-      case VK_LEFT  ⇒ player incX -1
-      case VK_RIGHT ⇒ player incX 1
-      case VK_UP    ⇒ player incY -1
-      case VK_DOWN  ⇒ player incY 1
-      case _ ⇒ //
-    }
+            case _ ⇒ None
 
-    override def keyReleased(event: KeyEvent): Unit = event.getKeyCode match {
-      case VK_ESCAPE  ⇒ parent.window close ()
-
-      case VK_NUMPAD0 |
-           VK_0       ⇒
-        parent board (player.x, player.y) foreach {_.value = 0}
-        parent render ()
-
-      case keyCode ⇒
-        (keyCode match {
-          case VK_NUMPAD1 |
-               VK_NUMPAD2 |
-               VK_NUMPAD3 |
-               VK_NUMPAD4 |
-               VK_NUMPAD5 |
-               VK_NUMPAD6 |
-               VK_NUMPAD7 |
-               VK_NUMPAD8 |
-               VK_NUMPAD9 ⇒
-            Option(keyCode - VK_NUMPAD0)
-
-          case VK_1 |
-               VK_2 |
-               VK_3 |
-               VK_4 |
-               VK_5 |
-               VK_6 |
-               VK_7 |
-               VK_8 |
-               VK_9 ⇒
-            Option(keyCode - VK_0)
-
-          case _ ⇒ None
-
-        }) match {
-          case Some(num) ⇒
-            parent board (player.x, player.y) match {
-              case Some(cell) ⇒ unless (cell?) {
-                if (event.isControlDown) cell toggle num
-                else parent board (player.x, player.y) = num
-                parent render ()
+          }) match {
+            case Some(num) ⇒
+              window.board match {
+                case Some(board) ⇒
+                  board(x, y) match {
+                    case Some(cell) ⇒ unless(cell?) {
+                      modifiers & Modifier.Control match {
+                        case 0 ⇒ board(x, y) = num
+                        case _ ⇒ cell toggle num
+                      }
+                      window.mustRender set true
+                    }
+                    case None ⇒ //
+                  }
+                case None ⇒ //
               }
-              case None ⇒ //
-            }
-
-          case None ⇒ //
-        }
+            case None ⇒ //
+          }
+      }
     }
-
-    private def unless(condition: ⇒ Boolean)(block: ⇒ Any): Unit = if (!condition) block
+    reactions
   }
+
+  private def unless(condition: ⇒ Boolean)(block: ⇒ Any): Unit = if (!condition) block
 }

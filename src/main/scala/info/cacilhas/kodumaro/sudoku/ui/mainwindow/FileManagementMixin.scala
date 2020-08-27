@@ -3,55 +3,53 @@ package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 import java.io.{File, PrintWriter}
 
 import info.cacilhas.kodumaro.sudoku.model.Board
-import javax.swing.{JFileChooser, JFrame, JOptionPane}
 
-import scala.io.Source
+import swing.{Dialog, FileChooser}
+import io.Source
 
-private[mainwindow] trait FileManagementMixin {
-  window: JFrame with BoardMixin ⇒
+trait FileManagementMixin {
+  window: Window ⇒
 
-  protected def open(): Unit = fileManager.open
+  def openBoard(): Unit = fileManager.open
 
-  protected def save(): Unit = fileManager.save
+  def saveBoard(): Unit = fileManager.save
 
   private lazy val homedir = System getProperty "user.home"
 
   private object fileManager {
 
-    def save: Unit = try {
-      if (board != null) {
+    def save: Unit = try board match {
+      case Some(board) ⇒
         val chooser = getChooser
-        if (chooser.showSaveDialog(window) == JFileChooser.APPROVE_OPTION) {
-          val file = chooser.getSelectedFile
+        if (chooser.showSaveDialog(window) == FileChooser.Result.Approve) {
+          val file = chooser.selectedFile
           val writer = new PrintWriter(file)
           try writer write s"$board"
           finally writer close ()
-          JOptionPane showMessageDialog (window, s"Board saved to $file", getTitle, JOptionPane.INFORMATION_MESSAGE)
+          Dialog showMessage (window, s"Board saved to $file", title, Dialog.Message.Info)
         }
-      } else
-        JOptionPane showMessageDialog (window, s"No board to save", getTitle, JOptionPane.WARNING_MESSAGE)
+
+      case None ⇒
+        Dialog showMessage (window, s"No board to save", title, Dialog.Message.Warning)
+
     } catch {
       case exc: Throwable ⇒
-        JOptionPane showMessageDialog (window, s"Could not save board: $exc", getTitle, JOptionPane.ERROR_MESSAGE)
+        Dialog showMessage (window, s"Could not save board: $exc", title, Dialog.Message.Error)
     }
 
     def open: Unit = try {
       val chooser = getChooser
-      if (chooser.showOpenDialog(window) == JFileChooser.APPROVE_OPTION) {
-        val source = Source fromFile chooser.getSelectedFile
-        try board = Board(source.getLines mkString "\n")
+      if (chooser.showOpenDialog(window) == FileChooser.Result.Approve) {
+        val source = Source fromFile chooser.selectedFile
+        mustRender set true
+        try board = Option(Board(source.getLines mkString "\n"))
         finally source.close
       }
     } catch {
       case exc: Throwable ⇒
-        JOptionPane showMessageDialog (window, s"Could not open file: $exc", getTitle, JOptionPane.ERROR_MESSAGE)
+        Dialog showMessage (window, s"Could not open file: $exc", title, Dialog.Message.Error)
     }
 
-    private def getChooser: JFileChooser = {
-      val chooser = new JFileChooser
-      chooser setCurrentDirectory new File(homedir)
-      chooser setDialogTitle getTitle
-      chooser
-    }
+    private def getChooser: FileChooser = new FileChooser(new File(homedir)) {title = window.title}
   }
 }

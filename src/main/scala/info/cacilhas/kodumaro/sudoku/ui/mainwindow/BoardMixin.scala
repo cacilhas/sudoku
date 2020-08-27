@@ -1,24 +1,14 @@
 package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
+import java.util.concurrent.atomic.AtomicReference
+
 import info.cacilhas.kodumaro.sudoku.model.Board
 
-private[mainwindow] trait BoardMixin {
+trait BoardMixin {
 
-  private var _board: Board = _
+  private val _board = new AtomicReference[Option[Board]](Option(Board())) // start with an empty board
 
-  protected def onBoardUpdate(): Unit
+  def board: Option[Board] = _board.get
 
-  def board: Board = _board
-
-  protected def board_=(board: Board): Unit = {
-    _board = board
-    onBoardUpdate()
-    collectGarbage()
-  }
-
-  private def collectGarbage(): Unit = Runtime.getRuntime match {
-    case rt ⇒
-      rt gc ()
-      rt runFinalization ()
-  }
+  def board_=(board: Option[Board]): Unit = _board set board
 }

@@ -14,7 +14,7 @@ object Main extends App {
   UIManager setLookAndFeel UIManager.getSystemLookAndFeelClassName
 
   Try("sudoku -g"!!) match {
-    case Success(_) ⇒ new Window setVisible true
+    case Success(_) ⇒ new Window visible = true
 
     case Failure(exc) if exc.isInstanceOf[IOException] ⇒
       JOptionPane showMessageDialog (
