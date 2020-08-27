@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import info.cacilhas.kodumaro.sudoku.ui.Theme
 
-import swing.event.{WindowActivated, WindowDeactivated}
+import swing.event.WindowActivated
 import swing._
 
 final class Window extends Frame
@@ -32,14 +32,7 @@ final class Window extends Frame
   menuBar = MenuBuilder(window)
 
   contents = player
-  reactions += {
-    case WindowActivated(`window`) ⇒
-      renderer start ()
-
-    case WindowDeactivated(`window`) ⇒
-      board = None
-      dispose()
-  }
+  reactions += {case WindowActivated(`window`) ⇒ renderer start ()}
 
   def about(): Unit = {
     Dialog showMessage (
@@ -52,6 +45,12 @@ final class Window extends Frame
       title,
       Dialog.Message.Info,
     )
+  }
+
+  override def close(): Unit = {
+    board = None
+    super.close()
+    dispose()
   }
 
   def yOffset: Int = renderer.yOffset
