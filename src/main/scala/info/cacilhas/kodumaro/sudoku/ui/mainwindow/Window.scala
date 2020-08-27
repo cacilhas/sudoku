@@ -1,6 +1,6 @@
 package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
-import java.awt.{Color, Dimension, Font, GridBagLayout}
+import java.awt.{Color, Dimension, Font}
 import java.util.concurrent.atomic.AtomicBoolean
 
 import info.cacilhas.kodumaro.sudoku.ui.Theme
@@ -26,12 +26,13 @@ final class Window extends Frame
   size = new Dimension(720, 720 + renderer.yOffset)
   minimumSize = size
   theme set window
-  peer.getContentPane setLayout new GridBagLayout
   centerOnScreen()
 
   menuBar = MenuBuilder(window)
 
-  contents = player
+  contents = new GridBagPanel {
+    layout(player) = new Constraints {fill = GridBagPanel.Fill.Both}
+  }
   reactions += {case WindowActivated(`window`) ⇒ renderer start ()}
 
   def about(): Unit = {
