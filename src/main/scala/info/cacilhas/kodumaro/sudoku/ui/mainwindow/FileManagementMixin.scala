@@ -10,9 +10,9 @@ import io.Source
 trait FileManagementMixin {
   window: Window ⇒
 
-  protected def openBoard(): Unit = fileManager.open
+  def openBoard(): Unit = fileManager.open
 
-  protected def saveBoard(): Unit = fileManager.save
+  def saveBoard(): Unit = fileManager.save
 
   private lazy val homedir = System getProperty "user.home"
 
