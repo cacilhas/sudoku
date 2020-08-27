@@ -20,8 +20,8 @@ trait RendererMixin {
     import ExecutionContext.Implicits.global
 
     object offset {
-      def x: Int = 0
-      def y: Int = 64
+      def x: Int = (window.size.width - 720) / 2
+      def y: Int = (window.size.height - 784) / 2 + 64
     }
 
     private val mutex = new Semaphore(1)
