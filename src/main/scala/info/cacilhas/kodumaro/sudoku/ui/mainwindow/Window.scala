@@ -1,5 +1,6 @@
 package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
+import java.awt.event.{ComponentEvent, ComponentListener}
 import java.awt.{Color, Dimension, Font}
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -35,6 +36,14 @@ final class Window extends Frame
   }
   contents foreach {theme set}
   reactions += {case WindowActivated(`window`) ⇒ renderer start ()}
+
+  // FIXME: how to create a window-resized reaction?
+  peer addComponentListener new ComponentListener {
+    override def componentResized(componentEvent: ComponentEvent): Unit = mustRender set true
+    override def componentMoved(componentEvent: ComponentEvent): Unit = ()
+    override def componentShown(componentEvent: ComponentEvent): Unit = ()
+    override def componentHidden(componentEvent: ComponentEvent): Unit = ()
+  }
 
   def about(): Unit = {
     Dialog showMessage (
