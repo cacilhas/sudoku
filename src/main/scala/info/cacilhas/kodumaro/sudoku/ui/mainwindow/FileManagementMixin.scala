@@ -18,8 +18,8 @@ trait FileManagementMixin {
 
   private object fileManager {
 
-    def save: Unit = try {
-      if (board != null) {
+    def save: Unit = try board match {
+      case Some(board) ⇒
         val chooser = getChooser
         if (chooser.showSaveDialog(window) == FileChooser.Result.Approve) {
           val file = chooser.selectedFile
@@ -28,8 +28,10 @@ trait FileManagementMixin {
           finally writer close ()
           Dialog showMessage (window, s"Board saved to $file", title, Dialog.Message.Info)
         }
-      } else
+
+      case None ⇒
         Dialog showMessage (window, s"No board to save", title, Dialog.Message.Warning)
+
     } catch {
       case exc: Throwable ⇒
         Dialog showMessage (window, s"Could not save board: $exc", title, Dialog.Message.Error)
@@ -48,10 +50,6 @@ trait FileManagementMixin {
         Dialog showMessage (window, s"Could not open file: $exc", title, Dialog.Message.Error)
     }
 
-    private def getChooser: FileChooser = {
-      new FileChooser(new File(homedir)) {
-        title = window.title
-      }
-    }
+    private def getChooser: FileChooser = new FileChooser(new File(homedir)) {title = window.title}
   }
 }

@@ -17,6 +17,7 @@ class Player(window: Window) extends Component {
   private val mutex = new Semaphore(1)
 
   focusable = true
+  listenTo(keys)
 
   def x: Int = _x.get
   def y: Int = _y.get
