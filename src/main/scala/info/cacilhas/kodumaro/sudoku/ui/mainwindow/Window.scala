@@ -33,6 +33,7 @@ final class Window extends Frame
   contents = new GridBagPanel {
     layout(player) = new Constraints {fill = GridBagPanel.Fill.Both}
   }
+  contents foreach {theme set}
   reactions += {case WindowActivated(`window`) ⇒ renderer start ()}
 
   def about(): Unit = {
