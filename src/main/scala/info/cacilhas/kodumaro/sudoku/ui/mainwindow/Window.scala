@@ -2,11 +2,10 @@ package info.cacilhas.kodumaro.sudoku.ui.mainwindow
 
 import java.awt.{Color, Dimension, Font, Graphics, GridBagLayout}
 import java.util.concurrent.Semaphore
-import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger, AtomicReference}
+import java.util.concurrent.atomic.{AtomicBoolean, AtomicInteger}
 
 import info.cacilhas.kodumaro.sudoku.game.{ClassLevel, Loader}
 import info.cacilhas.kodumaro.sudoku.game.solver.Solver
-import info.cacilhas.kodumaro.sudoku.model.Board
 import info.cacilhas.kodumaro.sudoku.ui.{Player, Sphere, Theme}
 import javax.swing.KeyStroke
 
@@ -16,6 +15,7 @@ import scala.util.Try
 import swing._
 
 final class Window extends Frame
+                   with BoardMixin
                    with FileManagementMixin {
   window ⇒
 
@@ -23,7 +23,6 @@ final class Window extends Frame
   import Solver._
 
   val mustRender: AtomicBoolean = new AtomicBoolean(true)
-  private val _board = new AtomicReference[Board](Board()) // start with an empty board
   private val theme = Theme(
     font = new Font("Noto", Font.PLAIN, 24),
     fg = Color.lightGray,
@@ -34,7 +33,7 @@ final class Window extends Frame
   private val player = new Player(this)
 
   title = "Kodumaro Sudoku"
-  size = new Dimension(720, 800)
+  size = new Dimension(720, 720 + drawer.yOffset)
   minimumSize = size
   theme set window
   peer.getContentPane setLayout new GridBagLayout
@@ -84,13 +83,6 @@ final class Window extends Frame
 
   reactions += {case _: WindowActivated ⇒ drawer start ()}
 
-  def board: Board = _board.get
-
-  def board_=(board: Board): Unit = {
-    _board set board
-    mustRender set true
-  }
-
   protected def about(): Unit = {
     Dialog showMessage (
       window,
@@ -137,6 +129,7 @@ final class Window extends Frame
 
     import ExecutionContext.Implicits.global
 
+    val yOffset: Int = 64
     private val mutex = new Semaphore(1)
     private val counter = new AtomicInteger(0)
     private val ticksBeforeStop = 2 // WORKAROUND
@@ -186,27 +179,27 @@ final class Window extends Frame
 
     private def drawPlayer(g: Graphics2D): Unit = {
       g setColor Color.white
-      g drawRect(player.x*80, player.y*80 + 80, 80, 80)
+      g drawRect(player.x*80, player.y*80 + yOffset, 80, 80)
     }
 
     private def drawBackground(g: Graphics2D): Unit =
       for (y ← 0 until 9; x ← 0 until 9) {
         g setColor backgrounds((x / 3 + y / 3) % 2)
-        g fillRect(x*80, y*80 + 80, 80, 80)
+        g fillRect(x*80, y*80 + yOffset, 80, 80)
         g setColor theme.bg
-        g drawRect(x*80, y*80 + 80, 80, 80)
+        g drawRect(x*80, y*80 + yOffset, 80, 80)
       }
 
     private def drawCircles(g: Graphics2D): Unit = if (board != null) {
       val sphere = new Sphere(g)
       for (y ← 0 until 9; x ← 0 until 9) board(x, y) match {
         case Some(cell) if cell? ⇒
-          sphere draw(x * 80 + 1, y * 80 + 81, 78, colours(cell.value))
+          sphere draw(x * 80 + 1, y * 80 + yOffset + 1, 78, colours(cell.value))
 
         case Some(cell) ⇒
           for (iy ← 0 until 3; ix ← 0 until 3; i = 1 + ix + (2 - iy) * 3)
             if (cell(i))
-              sphere draw(x * 80 + ix * 26 + 1, y * 80 + iy * 26 + 81, 26, colours(i))
+              sphere draw(x * 80 + ix * 26 + 1, y * 80 + iy * 26 + yOffset + 1, 26, colours(i))
 
         case None ⇒ //
       }
