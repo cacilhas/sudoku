@@ -96,13 +96,8 @@ final class Window extends Frame
     )
   }
 
-  protected def solve(solver: Solver): Unit = {
-    solver solve board
-    mustRender set true
-  }
-
   override def close(): Unit = {
-    board = null
+    board = None
     super.close()
     dispose()
   }
@@ -113,14 +108,14 @@ final class Window extends Frame
       case other  ⇒ s"ctrl ${other.toString.substring(0, 1).toUpperCase}"
     }))
     override def apply(): Unit = {
-      board = Loader(level)
+      board = Option(Loader(level))
       mustRender set true
     }
   }) {theme set this}
 
   private def buildSolveAction(solver: Solver): MenuItem = new MenuItem(new Action(solver.toString) {
     override def apply(): Unit = {
-      solver solve board
+      board foreach {solver solve}
       mustRender set true
     }
   }) {theme set this}
@@ -144,7 +139,7 @@ final class Window extends Frame
     def start(): Unit = {
       if (mutex.tryAcquire) Future(blocking {
         mustRender set true
-        try while (board != null) {
+        try while (board.isDefined) {
           if (peer.getKeyListeners.isEmpty)
             peer addKeyListener player.keyListener
           if (mustRender.get) render()
@@ -190,7 +185,7 @@ final class Window extends Frame
         g drawRect(x*80, y*80 + yOffset, 80, 80)
       }
 
-    private def drawCircles(g: Graphics2D): Unit = if (board != null) {
+    private def drawCircles(g: Graphics2D): Unit = board foreach { board ⇒
       val sphere = new Sphere(g)
       for (y ← 0 until 9; x ← 0 until 9) board(x, y) match {
         case Some(cell) if cell? ⇒

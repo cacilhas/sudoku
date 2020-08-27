@@ -51,50 +51,55 @@ class Player(parent: Window) {
     }
 
     override def keyReleased(event: KeyEvent): Unit = event.getKeyCode match {
-      case VK_ESCAPE  ⇒ parent close ()
+      case VK_ESCAPE ⇒ parent close ()
 
       case VK_NUMPAD0 |
-           VK_0       ⇒
-        parent board (player.x, player.y) foreach {_.value = 0}
+           VK_0 ⇒
+        parent.board foreach {_ (player.x, player.y) foreach {_.value = 0}}
         parent.mustRender set true
 
       case keyCode ⇒
-        (keyCode match {
-          case VK_NUMPAD1 |
-               VK_NUMPAD2 |
-               VK_NUMPAD3 |
-               VK_NUMPAD4 |
-               VK_NUMPAD5 |
-               VK_NUMPAD6 |
-               VK_NUMPAD7 |
-               VK_NUMPAD8 |
-               VK_NUMPAD9 ⇒
-            Option(keyCode - VK_NUMPAD0)
+        (
+          keyCode match {
+            case VK_NUMPAD1 |
+                 VK_NUMPAD2 |
+                 VK_NUMPAD3 |
+                 VK_NUMPAD4 |
+                 VK_NUMPAD5 |
+                 VK_NUMPAD6 |
+                 VK_NUMPAD7 |
+                 VK_NUMPAD8 |
+                 VK_NUMPAD9 ⇒
+              Option(keyCode - VK_NUMPAD0)
 
-          case VK_1 |
-               VK_2 |
-               VK_3 |
-               VK_4 |
-               VK_5 |
-               VK_6 |
-               VK_7 |
-               VK_8 |
-               VK_9 ⇒
-            Option(keyCode - VK_0)
+            case VK_1 |
+                 VK_2 |
+                 VK_3 |
+                 VK_4 |
+                 VK_5 |
+                 VK_6 |
+                 VK_7 |
+                 VK_8 |
+                 VK_9 ⇒
+              Option(keyCode - VK_0)
 
-          case _ ⇒ None
+            case _ ⇒ None
 
-        }) match {
-          case Some(num) ⇒
-            parent board (player.x, player.y) match {
-              case Some(cell) ⇒ unless (cell?) {
-                if (event.isControlDown) cell toggle num
-                else parent board (player.x, player.y) = num
-                parent.mustRender set true
+          }
+        ) match {
+        case Some(num) ⇒
+          parent.board match {
+            case Some(board) ⇒
+              board(player.x, player.y) match {
+                case Some(cell) ⇒ unless(cell ?) {
+                  if (event.isControlDown) cell toggle num
+                  else board(player.x, player.y) = num
+                  parent.mustRender set true
+                }
+                case None ⇒ //
               }
-              case None ⇒ //
-            }
-
+            case None ⇒ //
+          }
           case None ⇒ //
         }
     }

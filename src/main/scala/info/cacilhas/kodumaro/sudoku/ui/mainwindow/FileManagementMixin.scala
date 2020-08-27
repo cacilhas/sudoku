@@ -39,7 +39,8 @@ trait FileManagementMixin {
       val chooser = getChooser
       if (chooser.showOpenDialog(window) == FileChooser.Result.Approve) {
         val source = Source fromFile chooser.selectedFile
-        try board = Board(source.getLines mkString "\n")
+        mustRender set true
+        try board = Option(Board(source.getLines mkString "\n"))
         finally source.close
       }
     } catch {

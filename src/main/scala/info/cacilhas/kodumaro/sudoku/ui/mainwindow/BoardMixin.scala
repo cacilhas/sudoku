@@ -6,9 +6,9 @@ import info.cacilhas.kodumaro.sudoku.model.Board
 
 trait BoardMixin {
 
-  private val _board = new AtomicReference[Board](Board()) // start with an empty board
+  private val _board = new AtomicReference[Option[Board]](Option(Board())) // start with an empty board
 
-  def board: Board = _board.get
+  def board: Option[Board] = _board.get
 
-  def board_=(board: Board): Unit = _board set board
+  def board_=(board: Option[Board]): Unit = _board set board
 }
