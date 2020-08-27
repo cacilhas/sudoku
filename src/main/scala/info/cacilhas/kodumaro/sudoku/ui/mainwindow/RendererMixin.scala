@@ -13,7 +13,7 @@ import scala.util.Try
 trait RendererMixin {
   window: Window ⇒
 
-  private val player = new Player(this)
+  protected lazy val player = new Player(this)
 
   protected object renderer {
 
@@ -35,8 +35,6 @@ trait RendererMixin {
       if (mutex.tryAcquire) Future(blocking {
         mustRender set true
         try while (board.isDefined) {
-          if (peer.getKeyListeners.isEmpty)
-            peer addKeyListener player.keyListener
           if (mustRender.get) render()
           Thread sleep 20 // almost 50 fps
         } finally mutex release ()
@@ -64,12 +62,7 @@ trait RendererMixin {
       val g2d = g.asInstanceOf[Graphics2D]
       drawBackground(g2d)
       drawCircles(g2d)
-      drawPlayer(g2d)
-    }
-
-    private def drawPlayer(g: Graphics2D): Unit = {
-      g setColor Color.white
-      g drawRect(player.x*80, player.y*80 + yOffset, 80, 80)
+      player paint g2d
     }
 
     private def drawBackground(g: Graphics2D): Unit =

@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import info.cacilhas.kodumaro.sudoku.ui.Theme
 
-import scala.swing.event.WindowActivated
+import swing.event.{Key, KeyReleased, WindowActivated, WindowDeactivated}
 import swing._
 
 final class Window extends Frame
@@ -29,9 +29,23 @@ final class Window extends Frame
   peer.getContentPane setLayout new GridBagLayout
   centerOnScreen()
 
-  menuBar = MenuBuilder(this)
+  menuBar = MenuBuilder(window)
 
-  reactions += {case _: WindowActivated ⇒ renderer start ()}
+  listenTo(player.keys)
+  reactions += {
+    case WindowActivated(`window`) ⇒
+      player requestFocus ()
+      renderer start ()
+
+    case WindowDeactivated(`window`) ⇒
+      board = None
+      dispose()
+
+    case KeyReleased(_, Key.Escape, _, _) ⇒
+      close()
+
+    case evt ⇒ player publish evt
+  }
 
   def about(): Unit = {
     Dialog showMessage (
@@ -46,9 +60,5 @@ final class Window extends Frame
     )
   }
 
-  override def close(): Unit = {
-    board = None
-    super.close()
-    dispose()
-  }
+  def yOffset: Int = renderer.yOffset
 }
