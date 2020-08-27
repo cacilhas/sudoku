@@ -23,7 +23,7 @@ final class Window extends Frame
   private lazy val version = Option(getClass.getPackage.getImplementationVersion) getOrElse "1.0"
 
   title = "Kodumaro Sudoku"
-  size = new Dimension(720, 720 + renderer.yOffset)
+  size = new Dimension(720, 720 + offset.y)
   minimumSize = size
   theme set window
   centerOnScreen()
@@ -55,5 +55,7 @@ final class Window extends Frame
     dispose()
   }
 
-  def yOffset: Int = renderer.yOffset
+  type Offset = {def x: Int; def y: Int}
+
+  def offset: Offset = renderer.offset
 }

@@ -19,7 +19,12 @@ trait RendererMixin {
 
     import ExecutionContext.Implicits.global
 
-    val yOffset: Int = 64
+    object offset {
+      def x: Int = 0
+
+      def y: Int = 64
+    }
+
     private val mutex = new Semaphore(1)
     private val counter = new AtomicInteger(0)
     private val ticksBeforeStop = 2 // WORKAROUND
@@ -68,21 +73,21 @@ trait RendererMixin {
     private def drawBackground(g: Graphics2D): Unit =
       for (y ← 0 until 9; x ← 0 until 9) {
         g setColor backgrounds((x / 3 + y / 3) % 2)
-        g fillRect(x*80, y*80 + yOffset, 80, 80)
+        g fillRect(x*80, y*80 + offset.y, 80, 80)
         g setColor theme.bg
-        g drawRect(x*80, y*80 + yOffset, 80, 80)
+        g drawRect(x*80, y*80 + offset.y, 80, 80)
       }
 
     private def drawCircles(g: Graphics2D): Unit = board foreach { board ⇒
       val sphere = new Sphere(g)
       for (y ← 0 until 9; x ← 0 until 9) board(x, y) match {
         case Some(cell) if cell? ⇒
-          sphere draw(x * 80 + 1, y * 80 + yOffset + 1, 78, colours(cell.value))
+          sphere draw(x * 80 + 1, y * 80 + offset.y + 1, 78, colours(cell.value))
 
         case Some(cell) ⇒
           for (iy ← 0 until 3; ix ← 0 until 3; i = 1 + ix + (2 - iy) * 3)
             if (cell(i))
-              sphere draw(x * 80 + ix * 26 + 1, y * 80 + iy * 26 + yOffset + 1, 26, colours(i))
+              sphere draw(x * 80 + ix * 26 + 1, y * 80 + iy * 26 + offset.y + 1, 26, colours(i))
 
         case None ⇒ //
       }
