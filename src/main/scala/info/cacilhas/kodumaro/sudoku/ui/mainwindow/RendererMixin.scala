@@ -6,13 +6,18 @@ import java.util.concurrent.atomic.AtomicInteger
 
 import info.cacilhas.kodumaro.sudoku.ui.{Player, Sphere}
 
-import scala.concurrent.{ExecutionContext, Future, blocking}
-import scala.swing.Graphics2D
-import scala.util.Try
+import concurrent.{ExecutionContext, Future, blocking}
+import swing.Graphics2D
+import util.chaining._
+import util.{Try, Using}
 
-trait RendererMixin { window: Window ⇒
+trait RendererMixin { window: Window =>
 
   protected lazy val player = new Player(this)
+  implicit private val releasablePlayer: Using.Releasable[Player] =
+    (resource: Player) => resource.release()
+  implicit private val releasableSemaphore: Using.Releasable[Semaphore] =
+    (resource: Semaphore) => resource.release()
 
   protected object renderer {
 
@@ -36,58 +41,60 @@ trait RendererMixin { window: Window ⇒
 
     def start(): Unit = {
       if (mutex.tryAcquire) Future(blocking {
-        mustRender set true
-        try while (board.isDefined) {
-          if (mustRender.get) render()
-          Thread sleep 20 // almost 50 fps
-        } finally mutex release ()
+        Using(mutex) { _ =>
+          mustRender set true
+          while (board.isDefined) {
+            if (mustRender.get) render()
+            Thread sleep 20 // almost 50 fps
+          }
+        }
       })
     }
 
     def render(): Unit = Try {
       peer.getBufferStrategy match {
-        case null ⇒ window.peer.createBufferStrategy(3)
+        case null => window.peer.createBufferStrategy(3)
 
-        case strategy ⇒
-          if (player.tryAcquire) try {
-            val g = strategy.getDrawGraphics.asInstanceOf[Graphics2D]
-            draw(g)
-            g dispose()
-            strategy show()
+        case strategy =>
+          if (player.tryAcquire) Using(player) { _ =>
+            strategy
+              .getDrawGraphics
+              .asInstanceOf[Graphics2D]
+              .tap{draw(_)}
+              .tap{_.dispose()}
+            strategy.show()
             counter set (counter.get + 1) % ticksBeforeStop
             if (counter.get == 0) mustRender set false
-          } finally player release ()
+          }
       }
     }
 
-    private def draw(g: Graphics): Unit = {
-      peer paint g
-      val g2d = g.asInstanceOf[Graphics2D]
-      drawBackground(g2d)
-      drawCircles(g2d)
-      player paint g2d
-    }
+    private def draw(g: Graphics): Unit = g
+      .tap{peer paint}
+      .asInstanceOf[Graphics2D]
+      .tap{drawBackground}
+      .tap{drawCircles}
+      .tap{player paint}
 
     private def drawBackground(g: Graphics2D): Unit =
-      for (y ← 0 until 9; x ← 0 until 9) {
-        g setColor backgrounds((x / 3 + y / 3) % 2)
-        g fillRect(x*80 + offset.x, y*80 + offset.y, 80, 80)
-        g setColor theme.bg
-        g drawRect(x*80 + offset.x, y*80 + offset.y, 80, 80)
-      }
+      for (y <- 0 until 9; x <- 0 until 9) g
+        .tap{_ setColor backgrounds((x / 3 + y / 3) % 2)}
+        .tap{_ fillRect(x*80 + offset.x, y*80 + offset.y, 80, 80)}
+        .tap{_ setColor theme.bg}
+        .tap{_ drawRect(x*80 + offset.x, y*80 + offset.y, 80, 80)}
 
-    private def drawCircles(g: Graphics2D): Unit = board foreach { board ⇒
+    private def drawCircles(g: Graphics2D): Unit = board foreach { board =>
       val sphere = new Sphere(g)
-      for (y ← 0 until 9; x ← 0 until 9) board(x, y) match {
-        case Some(cell) if cell? ⇒
+      for (y <- 0 until 9; x <- 0 until 9) board(x, y) match {
+        case Some(cell) if cell? =>
           sphere draw(x * 80 + offset.x + 1, y * 80 + offset.y + 1, 78, colours(cell.value))
 
-        case Some(cell) ⇒
-          for (iy ← 0 until 3; ix ← 0 until 3; i = 1 + ix + (2 - iy) * 3)
+        case Some(cell) =>
+          for (iy <- 0 until 3; ix <- 0 until 3; i = 1 + ix + (2 - iy) * 3)
             if (cell(i))
               sphere draw(x * 80 + ix * 26 + offset.x + 1, y * 80 + iy * 26 + offset.y + 1, 26, colours(i))
 
-        case None ⇒ //
+        case None => //
       }
     }
   }

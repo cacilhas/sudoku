@@ -11,7 +11,7 @@ import swing._
 final class Window extends Frame
                    with BoardMixin
                    with FileManagementMixin
-                   with RendererMixin { window ⇒
+                   with RendererMixin { window =>
 
   val mustRender: AtomicBoolean = new AtomicBoolean(true)
   val theme: Theme = Theme(
@@ -38,9 +38,9 @@ final class Window extends Frame
   }
 
   reactions += {
-    case WindowActivated(`window`) ⇒ renderer start ()
-    case WindowClosed(`window`)    ⇒ board = None
-    case UIElementResized(_)       ⇒ mustRender set true
+    case WindowActivated(`window`) => renderer.start()
+    case WindowClosed(`window`)    => board = None
+    case UIElementResized(_)       => mustRender set true
   }
 
   def about(): Unit = {

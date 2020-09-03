@@ -4,7 +4,7 @@ name := "Kodumaro Sudoku"
 organization := "info.cacilhas.kodumaro"
 version := "1.1.0"
 javacOptions ++= Seq("-target", "1.8", "-Xlint")
-scalaVersion := "2.12.12"
+scalaVersion := "2.13.0"
 scalacOptions ++= Seq(
   "-deprecation", // warn on deprecation
   "-feature",     // warn on feature

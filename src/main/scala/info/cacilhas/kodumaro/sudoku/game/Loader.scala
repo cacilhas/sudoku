@@ -8,11 +8,12 @@ object Loader {
 
   private val command = "sudoku -g -fcompact"
 
-  def apply(level: ClassLevel): Board = try Board(s"$command -c$level".!!)
-  catch {
-    case err: RuntimeException ⇒
-      throw err initCause new RuntimeException(s"$command -c$level")
-  }
+  def apply(level: ClassLevel): Board =
+    try Board(s"$command -c$level".!!)
+    catch {
+      case err: RuntimeException =>
+        throw new RuntimeException(s"$command -c$level") initCause err
+    }
 
   def apply(level: String): Board = apply(ClassLevel from level)
 }

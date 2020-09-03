@@ -17,16 +17,16 @@ private object MenuBuilder {
       window.theme set this
       contents += new MenuItem(new Action("Open") {
         accelerator = Some(KeyStroke getKeyStroke "ctrl O")
-        override def apply(): Unit = window openBoard ()
+        override def apply(): Unit = window.openBoard()
       }) {window.theme set this}
       contents += new MenuItem(new Action("Save") {
         accelerator = Some(KeyStroke getKeyStroke "ctrl S")
-        override def apply(): Unit = window saveBoard ()
+        override def apply(): Unit = window.saveBoard()
       }) {window.theme set this}
       contents += new Separator
       contents += new MenuItem(new Action("Quit") {
         accelerator = Some(KeyStroke getKeyStroke "ctrl Q")
-        override def apply(): Unit = window close ()
+        override def apply(): Unit = window.close()
       }) {window.theme set this}
     }
 
@@ -48,7 +48,7 @@ private object MenuBuilder {
       window.theme set this
       contents += new MenuItem(new Action("About") {
         accelerator = Some(KeyStroke getKeyStroke "F1")
-        override def apply(): Unit = window about ()
+        override def apply(): Unit = window.about()
       }) {window.theme set this}
     }
   }
@@ -56,8 +56,8 @@ private object MenuBuilder {
   private def buildNewAction(level: ClassLevel, window: Window): MenuItem =
     new MenuItem(new Action(level.toString.capitalize) {
       accelerator = Some(KeyStroke getKeyStroke (level match {
-        case Medium ⇒ "ctrl N"
-        case other  ⇒ s"ctrl ${other.toString.substring(0, 1).toUpperCase}"
+        case Medium => "ctrl N"
+        case other  => s"ctrl ${other.toString.substring(0, 1).toUpperCase}"
       }))
       override def apply(): Unit = {
         window.board = Option(Loader(level))

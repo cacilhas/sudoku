@@ -11,7 +11,7 @@ class BoardTest extends Specification {
 
       "it should start empty" >> {
         "head" >> {board.header must beEqualTo("% started empty")}
-        for (y ← 0 until 9; x ← 0 until 9) s"board($x, $y)" >> {(board(x, y).get?) must beFalse}
+        for (y <- 0 until 9; x <- 0 until 9) s"board($x, $y)" >> {(board(x, y).get?) must beFalse}
         "board(10, 2) should not exist" >> {board(10, 2) must beNone}
       }
 
@@ -36,7 +36,7 @@ class BoardTest extends Specification {
       board(0, 0) = 9
 
       "it should be set" >> {
-        for (y ← 0 until 9; x ← 0 until 9 if x != 0 || y != 0) s"board($x, $y)" >> {(board(x, y).get?) must beFalse}
+        for (y <- 0 until 9; x <- 0 until 9 if x != 0 || y != 0) s"board($x, $y)" >> {(board(x, y).get?) must beFalse}
         "board(0, 0) should be set" >> {board(0, 0).get.value must beEqualTo(9)}
       }
 
@@ -60,7 +60,7 @@ class BoardTest extends Specification {
       val board = Board()
       board(0, 0) = 9
 
-      for (y ← 0 until 9; x ← 0 until 9 if x > 0 || y > 0)
+      for (y <- 0 until 9; x <- 0 until 9 if x > 0 || y > 0)
         if (x < 3 && y < 3) s"board($x, $y)(9) == false" >> {board(x, y).get apply 9 must beFalse}
         else if (x == 0 || y == 0) s"board($x, $y)(9) == false" >> {board(x, y).get apply 9 must beFalse}
         else s"board($x, $y)(9) == true" >> {board(x, y).get apply 9 must beTrue}

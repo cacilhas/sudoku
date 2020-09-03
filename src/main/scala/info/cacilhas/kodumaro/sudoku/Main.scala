@@ -14,9 +14,9 @@ object Main extends App {
   UIManager setLookAndFeel UIManager.getSystemLookAndFeelClassName
 
   Try("sudoku -g"!!) match {
-    case Success(_) ⇒ new Window visible = true
+    case Success(_) => new Window visible = true
 
-    case Failure(exc) if exc.isInstanceOf[IOException] ⇒
+    case Failure(exc) if exc.isInstanceOf[IOException] =>
       JOptionPane showMessageDialog (
         null,
         """Console-based Sudoku not found!
@@ -27,6 +27,6 @@ object Main extends App {
       )
       System exit 1
 
-    case Failure(exc) ⇒ throw exc
+    case Failure(exc) => throw exc
   }
 }
