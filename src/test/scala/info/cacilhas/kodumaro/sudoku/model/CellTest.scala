@@ -38,7 +38,7 @@ class CellTest extends Specification {
 
     "self single" >> {
       val cell = new Cell
-      for (i ← 2 to 9) cell(i) = false
+      for (i <- 2 to 9) cell(i) = false
 
       "value must be 0" >> {cell.value must beEqualTo(0)}
       "done must be false" >> {cell.? must beFalse}
@@ -51,7 +51,7 @@ class CellTest extends Specification {
       val cell = new Cell
 
       "it should start all set" >> {
-        for (i ← 1 to 9) s"cell($i) should be true" >> {cell(i) must beTrue}
+        for (i <- 1 to 9) s"cell($i) should be true" >> {cell(i) must beTrue}
         "cell(0) should be false" >> {cell(0) must beFalse}
       }
     }
@@ -61,7 +61,7 @@ class CellTest extends Specification {
       cell(2) = false
 
       "it should be set to false" >> {
-        for (i ← 1 to 9 if i != 2) s"cell($i) should be true" >> {cell(i) must beTrue}
+        for (i <- 1 to 9 if i != 2) s"cell($i) should be true" >> {cell(i) must beTrue}
         "cell(2) should be false" >> {cell(2) must beFalse}
       }
     }
@@ -71,7 +71,7 @@ class CellTest extends Specification {
       cell(10) = true
 
       "it should start all set" >> {
-        for (i ← 1 to 9) s"cell($i) should be true" >> {cell(i) must beTrue}
+        for (i <- 1 to 9) s"cell($i) should be true" >> {cell(i) must beTrue}
         "cell(10) should be false" >> {cell(10) must beFalse}
       }
     }

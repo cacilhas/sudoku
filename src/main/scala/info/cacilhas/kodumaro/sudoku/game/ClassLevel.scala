@@ -15,8 +15,8 @@ object ClassLevel extends Enumeration {
   val Fiendish: ClassLevel = Pro
 
   def from(value: String): ClassLevel = value.toLowerCase match {
-    case ""    ⇒ Medium
-    case "pro" ⇒ Pro
-    case value ⇒ values find {_.toString == value} map {_.asInstanceOf[ClassLevel]} getOrElse Medium
+    case ""    => Medium
+    case "pro" => Pro
+    case value => values find {_.toString == value} map {_.asInstanceOf[ClassLevel]} getOrElse Medium
   }
 }

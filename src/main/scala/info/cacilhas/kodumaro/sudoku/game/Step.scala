@@ -5,5 +5,5 @@ case class Step(x: Int, y: Int, value: Int) {
   require(0 <= y && y < 9, s"invalid y value $y")
   require(0 < value && value <= 9, s"invalid value $value")
 
-  override def toString: String = s"$value → ($x,$y)"
+  override def toString: String = s"$value -> ($x,$y)"
 }
