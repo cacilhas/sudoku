@@ -46,11 +46,15 @@ class Player(window: Window) extends Component {
   reactions += {
     val reactions = new Reactions.Impl
     reactions += {
-      case KeyPressed(_, Key.Left, _, _)     => incX(-1)
-      case KeyPressed(_, Key.Right, _, _)    => incX(1)
-      case KeyPressed(_, Key.Up, _, _)       => incY(-1)
-      case KeyPressed(_, Key.Down, _, _)     => incY(1)
       case KeyReleased(_, Key.Escape, _, _)  => window.close()
+      case KeyPressed(_, Key.Left, _, _)     |
+           KeyPressed(_, Key.A, _, _)        => incX(-1)
+      case KeyPressed(_, Key.Right, _, _)    |
+           KeyPressed(_, Key.D, _, _)        => incX(1)
+      case KeyPressed(_, Key.Up, _, _)       |
+           KeyPressed(_, Key.W, _, _)        => incY(-1)
+      case KeyPressed(_, Key.Down, _, _)     |
+           KeyPressed(_, Key.S, _, _)        => incY(1)
       case KeyReleased(_, Key.Numpad0, _, _) |
            KeyReleased(_, Key.Key0, _, _)    =>
         window.board foreach {_ (x, y) foreach {_.value = 0}}
@@ -89,7 +93,7 @@ class Player(window: Window) extends Component {
                 case Some(board) =>
                   board(x, y) match {
                     case Some(cell) => unless(cell?) {
-                      modifiers & Modifier.Control match {
+                      modifiers & (Modifier.Control | Modifier.Shift) match {
                         case 0 => board(x, y) = num
                         case _ => cell toggle num
                       }
