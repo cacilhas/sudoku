@@ -47,16 +47,20 @@ class Player(window: Window) extends Component {
     val reactions = new Reactions.Impl
     reactions += {
       case KeyReleased(_, Key.Escape, _, _)  => window.close()
-      case KeyPressed(_, Key.Left, _, _)     |
-           KeyPressed(_, Key.A, _, _)        => incX(-1)
-      case KeyPressed(_, Key.Right, _, _)    |
-           KeyPressed(_, Key.D, _, _)        => incX(1)
-      case KeyPressed(_, Key.Up, _, _)       |
-           KeyPressed(_, Key.W, _, _)        => incY(-1)
-      case KeyPressed(_, Key.Down, _, _)     |
-           KeyPressed(_, Key.S, _, _)        => incY(1)
-      case KeyReleased(_, Key.Numpad0, _, _) |
-           KeyReleased(_, Key.Key0, _, _)    =>
+      case KeyPressed(_, Key.Left, 0, _)     |
+           KeyPressed(_, Key.H, 0, _)        |
+           KeyPressed(_, Key.A, 0, _)        => incX(-1)
+      case KeyPressed(_, Key.Right, 0, _)    |
+           KeyPressed(_, Key.L, 0, _)        |
+           KeyPressed(_, Key.D, 0, _)        => incX(1)
+      case KeyPressed(_, Key.Up, 0, _)       |
+           KeyPressed(_, Key.K, 0, _)        |
+           KeyPressed(_, Key.W, 0, _)        => incY(-1)
+      case KeyPressed(_, Key.Down, 0, _)     |
+           KeyPressed(_, Key.J, 0, _)        |
+           KeyPressed(_, Key.S, 0, _)        => incY(1)
+      case KeyReleased(_, Key.Numpad0, 0, _) |
+           KeyReleased(_, Key.Key0, 0, _)    =>
         window.board foreach {_ (x, y) foreach {_.value = 0}}
         window.mustRender set true
 
