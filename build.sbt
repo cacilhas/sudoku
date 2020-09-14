@@ -2,7 +2,7 @@ addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVers
 
 name := "Kodumaro Sudoku"
 organization := "info.cacilhas.kodumaro"
-version := "1.1.1"
+version := "1.1.2"
 javacOptions ++= Seq("-target", "1.8", "-Xlint")
 scalaVersion := "2.13.0"
 scalacOptions ++= Seq(
