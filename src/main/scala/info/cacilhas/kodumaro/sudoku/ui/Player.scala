@@ -100,14 +100,13 @@ class Player(window: Window) extends Component {
               window.board match {
                 case Some(board) =>
                   board(x, y) match {
-                    case Some(cell) => unless(cell?) {
+                    case Some(cell) if !(cell?) =>
                       modifiers & (Modifier.Control | Modifier.Shift) match {
                         case 0 => board(x, y) = num
                         case _ => cell toggle num
                       }
                       window.mustRender set true
-                    }
-                    case None => //
+                    case _ => //
                   }
                 case None => //
               }
@@ -117,6 +116,4 @@ class Player(window: Window) extends Component {
     }
     reactions
   }
-
-  private def unless(condition: => Boolean)(block: => Any): Unit = if (!condition) block
 }
