@@ -26,7 +26,7 @@ It’s a GUI interface for [Console-based Sudoku][sudoku] on
 ### For compiling
 
 - Java JDK 1.8 or higher (suggested: [OpenJDK][openjdk])
-- Scala 2.12.12
+- Scala 2.13
 - SBT 1.3.13
 - Sudoku package
 
@@ -36,7 +36,7 @@ Compiling:
 sbt clean assembly
 ```
 
-After this, you can find the uberjar at `target/scala-2.12/kodumaro-sudoku.jar`.
+After this, you can find the uberjar at `target/scala-2.13/kodumaro-sudoku.jar`.
 
 ## Releases
 
