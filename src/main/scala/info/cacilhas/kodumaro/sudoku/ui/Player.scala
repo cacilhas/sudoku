@@ -63,6 +63,10 @@ class Player(window: Window) extends Component {
            KeyReleased(_, Key.Key0, 0, _)    =>
         window.board foreach {_ (x, y) foreach {_.value = 0}}
         window.mustRender set true
+      case KeyPressed(_, Key.C, 0, _)        =>
+        _x set 4
+        _y set 4
+        window.mustRender set true
 
       case KeyReleased(_, key, modifiers, _) => key match {
         case key =>
