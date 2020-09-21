@@ -35,8 +35,8 @@ trait RendererMixin { window: Window =>
     private lazy val colours = Seq(
       theme.bg,
       new Color(0xe00000), new Color(0xe08000), new Color(0xe0e000),
-      new Color(0x00e000), new Color(0x0008e0), new Color(0x4b0082),
-      new Color(0x9932cc), new Color(0xe000e0), new Color(0xc0c0c0),
+      new Color(0x00e000), new Color(0x0080e0), new Color(0x8040c0),
+      new Color(0xc040d0), new Color(0xf000e0), new Color(0xa0a0a0),
       )
 
     def start(): Unit = {
