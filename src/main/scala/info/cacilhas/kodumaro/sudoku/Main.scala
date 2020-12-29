@@ -16,7 +16,7 @@ object Main extends App {
   Try("sudoku -g"!!) match {
     case Success(_) => new Window visible = true
 
-    case Failure(exc) if exc.isInstanceOf[IOException] =>
+    case Failure(exc: IOException) =>
       JOptionPane showMessageDialog (
         null,
         """Console-based Sudoku not found!
