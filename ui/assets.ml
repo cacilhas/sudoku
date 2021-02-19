@@ -1,6 +1,24 @@
+type position = w:int -> h:int -> Sdlvideo.rect
+
+
+module type PIXEL_INFO = sig
+  val rmask : int32
+  val gmask : int32
+  val bmask : int32
+  val amask : int32
+end
+
+
+module Pixel_info : PIXEL_INFO = struct
+  let rmask = 255l       (*16711680l*)
+  and gmask = 65280l     (*65280l*)
+  and bmask = 16711680l  (*255l*)
+  and amask = -16777216l (*0l*)
+end
+
 let get_bg_color x y = match ((x/3) + (y/3)) mod 2 with
-  | 0 -> (64, 64, 64)
-  | _ -> (192, 192, 192)
+  | 0 -> (92, 92, 92)
+  | _ -> (156, 156, 156)
 
 
 let get_fg_color i = match i with
@@ -19,7 +37,10 @@ let create_square_surface (size:int) _ =
   Sdlvideo.create_RGB_surface
     [`HWSURFACE; `SRCALPHA; `SRCCOLORKEY]
     ~w:size ~h:size ~bpp:32
-    ~rmask:255l ~gmask:65280l ~bmask:16711680l ~amask:(-16777216l)
+    ~rmask:Pixel_info.rmask
+    ~gmask:Pixel_info.gmask
+    ~bmask:Pixel_info.bmask
+    ~amask:Pixel_info.amask
 
 
 let large_circles =

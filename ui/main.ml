@@ -1,7 +1,8 @@
 open Sdlkey
 open Sudoku
 
-
+type size_t = { w : int ; h : int }
+let tsize = { w = 756 ; h = 756 }
 
 let deal_with_press (sym, kmod) = match sym with
   | KEY_ESCAPE -> exit 0
@@ -58,6 +59,12 @@ let deal_with_press (sym, kmod) = match sym with
   | _ -> ()
 
 
+let deal_with_resize (w, h) =
+  Sdlvideo.set_video_mode ~w:w ~h:h ~bpp:32 [`DOUBLEBUF; `RESIZABLE]
+  |> ignore
+
+
+
 let draw_cell screen x y (cell : Cell.cell) =
   if cell#value = 0
   then for dy = 0 to 2 do
@@ -72,7 +79,7 @@ let draw_cell screen x y (cell : Cell.cell) =
        Assets.draw_circle `Large screen pos cell#value
 
 
-let draw_table screen =
+let draw_bg screen =
   for y = 0 to 8 do
     for x = 0 to 8 do
       let rect = Sdlvideo.rect ~x:(x*84+1) ~y:(y*84+1) ~w:82 ~h:82
@@ -83,7 +90,7 @@ let draw_table screen =
 
 
 let draw_board screen (board : Board.board) =
-  draw_table screen
+  draw_bg screen
 ; for y = 0 to 8 do
     for x = 0 to 8 do
       board#get x y |> draw_cell screen x y
@@ -97,17 +104,29 @@ let draw_player screen (x, y) =
   Sdlvideo.fill_rect ~rect:rect screen color
 
 
-let rec loop screen =
-  Sdlvideo.fill_rect screen (Sdlvideo.map_RGB screen Sdlvideo.black)
-; Game.the_player () |> draw_player screen
-; Game.the_board  () |> draw_board screen
+let draw_table screen table =
+  let info = Sdlvideo.surface_info screen in
+  let x = (info.w - tsize.w) / 2
+  and y = (info.h - tsize.h) / 2 in
+  let rect = Sdlvideo.rect ~x:x ~y:y ~w:tsize.w ~h:tsize.h in
+  Sdlvideo.blit_surface ~src:table ~dst:screen ~dst_rect:rect ()
+
+
+let rec loop screen table =
+  let bg_color = Sdlvideo.map_RGB screen Sdlvideo.black in
+  Sdlvideo.fill_rect screen bg_color
+; Sdlvideo.fill_rect table bg_color
+; Game.the_player () |> draw_player table
+; Game.the_board  () |> draw_board table
+; draw_table screen table
 ; Sdlvideo.flip screen
 ; begin
     match Sdlevent.wait_event () with
-      | Sdlevent.KEYDOWN evt -> deal_with_press (evt.keysym, evt.keymod)
-      | _                    -> ()
+      | Sdlevent.KEYDOWN evt        -> deal_with_press (evt.keysym, evt.keymod)
+      | Sdlevent.VIDEORESIZE (w, h) -> deal_with_resize (w, h)
+      | _                           -> ()
   end
-; loop screen
+; loop screen table
 
 
 let mainloop () =
@@ -115,4 +134,15 @@ let mainloop () =
 ; at_exit Sdl.quit
 ; Sdlwm.set_caption ~title:"Kodumaro Sudoku" ~icon:"sudoku"
 ; Sdlevent.enable_events Sdlevent.keydown_mask
-; Sdlvideo.set_video_mode ~w:756 ~h:756 [`DOUBLEBUF] |> loop
+; let screen = Sdlvideo.set_video_mode
+               ~w:tsize.w ~h:tsize.h ~bpp:32
+               [`DOUBLEBUF; `RESIZABLE]
+  and table = Sdlvideo.create_RGB_surface
+              [`HWSURFACE]
+              ~w:tsize.w ~h:tsize.h ~bpp:32
+              ~rmask:Assets.Pixel_info.rmask
+              ~gmask:Assets.Pixel_info.gmask
+              ~bmask:Assets.Pixel_info.bmask
+              ~amask:Assets.Pixel_info.amask
+  in
+  loop screen table
