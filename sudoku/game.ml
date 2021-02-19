@@ -33,6 +33,7 @@ let act the_action = match the_action with
       end
   | NewGame lv ->
       index := 0
+    ; player := (4, 4)
     ; let new_board = Loader.create_board lv in
       for i = 0 to 80 do
         boards.(i) <- new_board
