@@ -32,7 +32,7 @@ let shade surface (x, y) xradius color =
   done
 
 
-let draw_circle surface ~x ~y ~radius color =
+let fill_circle surface ~x ~y ~radius color =
   for degree = 0 to 90 do
     let rad = (float_of_int degree) *. Float.pi /. 180.0
     and radius = float_of_int radius in

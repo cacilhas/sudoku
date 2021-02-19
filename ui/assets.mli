@@ -13,4 +13,4 @@ module Pixel_info : PIXEL_INFO
 
 val get_bg_color : int -> int -> color
 val get_fg_color : int -> color
-val draw_circle  : [`Small | `Large] -> surface -> position -> int -> unit
+val fill_circle  : [`Small | `Large] -> surface -> position -> int -> unit

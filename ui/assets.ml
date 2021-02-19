@@ -49,7 +49,7 @@ let large_circles =
     let surface = surfaces.(i-1) in
     get_fg_color i
     |> Sdlvideo.map_RGB surface
-    |> Circle.draw_circle surface ~x:42 ~y:42 ~radius:40
+    |> Circle.fill_circle surface ~x:42 ~y:42 ~radius:40
   done
 ; surfaces
 
@@ -60,7 +60,7 @@ let small_circles =
     let surface = surfaces.(i-1) in
     get_fg_color i
     |> Sdlvideo.map_RGB surface
-    |> Circle.draw_circle surface ~x:14 ~y:14 ~radius:12
+    |> Circle.fill_circle surface ~x:14 ~y:14 ~radius:12
   done
 ; surfaces
 
@@ -70,7 +70,7 @@ let get_circle tpe i = match tpe with
   | `Large -> large_circles.(i-1)
 
 
-let draw_circle tpe dst rect i =
+let fill_circle tpe dst rect i =
   let rect = rect ~w:0 ~h:0
   and src = get_circle tpe i in
   Sdlvideo.blit_surface ~src:src ~dst:dst ~dst_rect:rect ()
