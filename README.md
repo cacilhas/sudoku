@@ -41,6 +41,22 @@ dune build
 
 Move the executable (`_build/default/bin/sudoku.exe`) to your `PATH`.
 
+## Playing
+
+Keys:
+
+- Keypad numbers (`KP1`, `KP2`…): change the candidate flag.
+- Keypad numbers with Shift (`S-KP1`, `S-KP2`…): set the cell value.
+- Arrows or WASD (`w`, `a`, `s`, `d`): move the player position.
+- C-key (`c`): center the player.
+- U-key (`u`): undo value set.
+- N-key with Ctrl (`C-n`): new hard game.
+- 1-key with Ctrl (`C-1`): new easy game.
+- 2-key with Ctrl (`C-2`): new medium game.
+- 3-key with Ctrl (`C-3`): new hard game.
+- 4-key with Ctrl (`C-4`): new fiendish game.
+- Esc (`escape`): quit.
+
 ## Copying
 
 ### License
