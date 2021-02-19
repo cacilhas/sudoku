@@ -28,7 +28,7 @@ let large_circles =
     let surface = surfaces.(i-1) in
     get_fg_color i
     |> Sdlvideo.map_RGB surface
-    |> Circle.draw_circle surface ~x:42 ~y:42 ~radius:41
+    |> Circle.draw_circle surface ~x:42 ~y:42 ~radius:40
   done
 ; surfaces
 
@@ -39,7 +39,7 @@ let small_circles =
     let surface = surfaces.(i-1) in
     get_fg_color i
     |> Sdlvideo.map_RGB surface
-    |> Circle.draw_circle surface ~x:14 ~y:14 ~radius:13
+    |> Circle.draw_circle surface ~x:14 ~y:14 ~radius:12
   done
 ; surfaces
 
