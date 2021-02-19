@@ -11,9 +11,7 @@
 
 # Kodumaro Sudoku
 
-This is a toy project, intending explore [Swing][swing]/[AWT][awt] a bit.
-
-It’s a GUI interface for [Console-based Sudoku][sudoku] on
+This is a GUI interface for Michael Kennett’s [Console-based Sudoku][sudoku] on
 [**GNU/Linux**][linux] and [**macOS**][macos] (this last untested).
 
 ## Requirement
