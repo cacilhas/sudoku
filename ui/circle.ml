@@ -1,4 +1,5 @@
 let alter_color surface color factor =
+  let factor = Float.pi *. factor /. 2.0 |> sin in
   let r = Int32.unsigned_rem color 256l
           |> Int32.to_float |> ( *.) factor |> int_of_float
   and g = Int32.unsigned_rem (Int32.unsigned_div color 256l) 256l
@@ -15,7 +16,7 @@ let rotate (x, y) rad =
 
 
 let shade surface (x, y) xradius color =
-  for yradius = (xradius/3) to xradius do
+  for yradius = (xradius*2/5) to xradius do
     let xradius = float_of_int xradius
     and yradius = float_of_int yradius in
     let shadow = alter_color surface color ((xradius -. (yradius /. 2.0)) /. xradius) in
