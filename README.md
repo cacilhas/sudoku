@@ -5,6 +5,7 @@
 [license]: https://github.com/cacilhas/sudoku/blob/master/COPYING
 [linux]: https://www.gnu.org/gnu/linux-and-gnu.en.html
 [macos]: https://www.apple.com/macos/
+[make]: https://www.gnu.org/software/make/manual/make.html
 [ocaml]: https://ocaml.org/
 [opam]: https://opam.ocaml.org/
 [sudoku]: https://packages.debian.org/buster/sudoku
@@ -22,6 +23,7 @@ Nothing.
 
 ### For compiling
 
+- [GNU `make`][make]
 - An [OCaml compiler][ocaml]
 - [Opam][opam]
 - [Dune][dune]
@@ -29,17 +31,30 @@ Nothing.
 
 Compiling:
 
-```
+```sh
 # In case you don’t get Dune installed yet:
 opam install dune
 
+# Install dependencies
 opam install ocamlsdl ppx_inline_test
-dune build
+
+# Compile:
+make
 ```
 
 ### Installing
 
-Move the executable (`_build/default/bin/sudoku.exe`) to your `PATH`.
+Install only for the current user:
+
+```sh
+make install
+```
+
+Install for all users:
+
+```sh
+sudo make PREFIX=/usr/local install
+```
 
 ## Playing
 
