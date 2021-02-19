@@ -1,0 +1,5 @@
+(library
+  (name sudoku)
+  (inline_tests)
+  (libraries str unix)
+  (preprocess (pps ppx_inline_test)))
