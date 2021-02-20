@@ -33,44 +33,45 @@ let get_fg_color i = match i with
   | _ -> (184, 184, 184)
 
 
-let create_square_surface (size:int) _ =
+let create_square_surface (w, h) =
   Sdlvideo.create_RGB_surface
     [`HWSURFACE; `SRCALPHA; `SRCCOLORKEY]
-    ~w:size ~h:size ~bpp:32
+    ~w:w ~h:h ~bpp:32
     ~rmask:Pixel_info.rmask
     ~gmask:Pixel_info.gmask
     ~bmask:Pixel_info.bmask
     ~amask:Pixel_info.amask
 
 
-let large_circles =
-  let surfaces = Array.init 9 (create_square_surface 84) in
+let coordinates (where : [`Top | `Center]) (tpe : [`Large | `Small]) (i : int)
+: (int * int) * int =
+  match (where, tpe) with
+    | (`Top,    `Small) -> ((26*(i-1),      82), 26)
+    | (`Top,    `Large) -> ((82*(i-1),       0), 82)
+    | (`Center, `Small) -> ((26*(i-1) + 13, 95), 12)
+    | (`Center, `Large) -> ((82*(i-1) + 41, 41), 40)
+
+
+let circles =
+  let surface = create_square_surface (756, 112) in
   for i = 1 to 9 do
-    let surface = surfaces.(i-1) in
-    get_fg_color i
-    |> Sdlvideo.map_RGB surface
-    |> Circle.fill_circle surface ~x:42 ~y:42 ~radius:40
+    let color = get_fg_color i |> Sdlvideo.map_RGB surface
+    and ((lx, ly), lr) = coordinates `Center `Large i
+    and ((sx, sy), sr) = coordinates `Center `Small i in
+    Circle.fill_circle surface ~x:lx ~y:ly ~radius:lr color
+  ; Circle.fill_circle surface ~x:sx ~y:sy ~radius:sr color
   done
-; surfaces
+; surface
 
 
-let small_circles =
-  let surfaces = Array.init 9 (create_square_surface 28) in
-  for i = 1 to 9 do
-    let surface = surfaces.(i-1) in
-    get_fg_color i
-    |> Sdlvideo.map_RGB surface
-    |> Circle.fill_circle surface ~x:14 ~y:14 ~radius:12
-  done
-; surfaces
-
-
-let get_circle tpe i = match tpe with
-  | `Small -> small_circles.(i-1)
-  | `Large -> large_circles.(i-1)
+let get_circle_rect tpe i =
+  let ((x, y), sz) = coordinates `Top tpe i in
+  Sdlvideo.rect ~x:x ~y:y ~w:sz ~h:sz
 
 
 let fill_circle tpe dst rect i =
-  let rect = rect ~w:0 ~h:0
-  and src = get_circle tpe i in
-  Sdlvideo.blit_surface ~src:src ~dst:dst ~dst_rect:rect ()
+  let dst_rect = rect ~w:0 ~h:0
+  and src_rect = get_circle_rect tpe i in
+  Sdlvideo.blit_surface
+    ~src:circles ~src_rect:src_rect
+    ~dst:dst ~dst_rect:dst_rect     ()
