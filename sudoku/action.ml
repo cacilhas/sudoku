@@ -4,7 +4,7 @@ type action = MoveLeft
             | MoveDown
             | MoveCenter
             | Undo
-            | FullHouse of Board.full_house
+            | FullHouse of Solve.solve_tpe
             | Toggle of int
             | SetValue of int
             | NewGame of Loader.level

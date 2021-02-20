@@ -35,11 +35,11 @@ let deal_with_press (sym, kmod) = match sym with
              then Game.act (Action.NewGame Loader.Fiendish)
 
   | KEY_SPACE -> Action.FullHouse (if (kmod land kmod_shift) * (kmod land kmod_ctrl) != 0
-                                   then Board.Hungry
+                                   then Solve.Hungry
                                    else if kmod land kmod_shift != 0
-                                   then Board.Normal
+                                   then Solve.Normal
                                    else let (x, y) = Game.the_player () in
-                                        Board.Group (x, y))
+                                        Solve.Group (x, y))
                  |> Game.act
 
   | KEY_KP1 -> if kmod land kmod_shift = 0

@@ -1,8 +1,6 @@
 open Cell
 open Errors
 
-type full_house = Group of int * int | Normal | Hungry
-
 let new_cell_list () = List.init 81 (new cell)
 
 class board ?cells:(cells = new_cell_list ()) _ = object (self)
@@ -12,8 +10,6 @@ class board ?cells:(cells = new_cell_list ()) _ = object (self)
   ; if y < 0 || y > 8 then Out_of_range (y, (0, 8)) |> raise
   ; y*9 + x
   end
-
-  val xy_from_index = fun idx -> (idx mod 9, idx / 9)
 
   method get x y = index_from_xy x y |> List.nth cells
 
@@ -46,46 +42,6 @@ class board ?cells:(cells = new_cell_list ()) _ = object (self)
 
     end
     else (self :> board)
-
-  method set_settables tpe =
-    match tpe with
-
-      | Group (px, py) ->
-        let res = ref (self :> board)
-        and x0 = (px / 3) * 3
-        and y0 = (py / 3) * 3 in
-        for y = y0 to y0+2 do
-          for x = x0 to x0+2 do
-            let value = (self#get x y)#settable in
-            if value != 0
-            then res := (!res)#set x y value
-          done
-        done
-      ; !res
-
-      | Normal ->
-        let res = ref (self :> board) in
-        for y = 0 to 8 do
-          for x = 0 to 8 do
-            let value = (self#get x y)#settable in
-            if value != 0
-            then res := (!res)#set x y value
-          done
-        done
-      ; !res
-
-      | Hungry ->
-        let rec loop cur idx =
-          let (x, y) = xy_from_index idx in
-          begin
-            match (cur#get x y)#settable with
-              | 0     -> if idx = 80
-                         then cur
-                         else loop cur (idx + 1)
-              | value -> loop (cur#set x y value) 0
-          end
-        in loop (self :> board) 0
-
 end
 
 

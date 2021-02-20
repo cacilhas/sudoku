@@ -21,7 +21,7 @@ let act the_action = match the_action with
   | Undo          -> index := max 0 (!index - 1)
   | FullHouse tpe ->
       let cur = the_board () in
-      let new_board = cur#set_settables tpe in
+      let new_board = Solve.Full_house.solve cur tpe in
       if new_board != cur
       then begin
         index := !index + 1
