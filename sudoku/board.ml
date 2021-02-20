@@ -46,19 +46,17 @@ class board ?cells:(cells = new_cell_list ()) _ = object (self)
     else (self :> board)
 
   method set_settables () =
-    let rec loop cur idx =
-      let (x, y) = xy_from_index idx in
-      let value = (cur#get x y)#settable in
-      if value = 0
-      then begin
-        if idx = 80
-        then cur
-        else loop cur (idx + 1)
-      end
-      else loop (cur#set x y value) 0
-    in
-    loop (self :> board) 0
-
+    let res = ref (self :> board) in
+    for y = 0 to 8 do
+      for x = 0 to 8 do
+        let value = (self#get x y)#settable in
+        if value != 0
+        then begin
+          res := (!res)#set x y value
+        end
+      done
+    done
+  ; !res
 end
 
 
