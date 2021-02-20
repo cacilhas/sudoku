@@ -34,7 +34,7 @@ let deal_with_press (sym, kmod) = match sym with
   | KEY_4 -> if kmod land kmod_ctrl != 0
              then Game.act (Action.NewGame Loader.Fiendish)
 
-  | KEY_SPACE -> Action.FullHouse (if kmod land kmod_shift land kmod_ctrl != 0
+  | KEY_SPACE -> Action.FullHouse (if (kmod land kmod_shift) * (kmod land kmod_ctrl) != 0
                                    then Board.Hungry
                                    else if kmod land kmod_shift != 0
                                    then Board.Normal
