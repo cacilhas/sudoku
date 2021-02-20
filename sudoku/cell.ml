@@ -26,6 +26,18 @@ class cell ?value:(bound = 0) _ = object (self)
 
   method set i = self#set' i i
 
+  method settable =
+    if bound = 0
+    then begin
+      let valids = Array.to_list candidates
+                   |> List.map int_of_char
+                   |> List.filter ((!=) 0) in
+      if (List.length valids) = 1
+      then List.nth valids 0
+      else 0
+    end
+    else 0
+
   method toggle i =
     if self#is_set i
     then self#clear i
@@ -100,6 +112,24 @@ let%test "Cell.cell#set i should set index" =
   a_cell#clear 5
 ; a_cell#set 5
 ; a_cell#is_set 5
+
+let%test "Cell.cell#settable must return 0 for multiple candidates" =
+  (new cell 0)#settable = 0
+
+let%test "Cell.cell#settable must return 0 for set cell" =
+  let a_cell = new cell 5 in
+  for i = 1 to 9 do
+    a_cell#clear i|> ignore
+  done
+; a_cell#settable = 0
+
+let%test "Cell.cell#settable must return the single candidate" =
+  let a_cell = new cell 0 in
+  for i = 1 to 9 do
+    a_cell#clear i|> ignore
+  done
+; a_cell#set 4
+; a_cell#settable = 4
 
 let%test_unit "Cell.cell#toggle i should toggle index" =
   let a_cell = new cell 0 in

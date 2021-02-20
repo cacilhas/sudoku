@@ -11,6 +11,8 @@ class board ?cells:(cells = new_cell_list ()) _ = object (self)
   ; y*9 + x
   end
 
+  val xy_from_index = fun idx -> (idx mod 9, idx / 9)
+
   method get x y = index_from_xy x y |> List.nth cells
 
   method set x y value =
@@ -42,6 +44,21 @@ class board ?cells:(cells = new_cell_list ()) _ = object (self)
 
     end
     else (self :> board)
+
+  method set_settables () =
+    let rec loop cur idx =
+      let (x, y) = xy_from_index idx in
+      let value = (cur#get x y)#settable in
+      if value = 0
+      then begin
+        if idx = 80
+        then cur
+        else loop cur (idx + 1)
+      end
+      else loop (cur#set x y value) 0
+    in
+    loop (self :> board) 0
+
 end
 
 
@@ -103,3 +120,5 @@ let%test_unit "Board.board#set 0 0 1 should fail if cell is unset" =
       then Failure (Printf.sprintf "cell %d,%d should be 0, got %d" x y got) |> raise
     done
   done
+
+let%test_unit "Board.board#set_setables test to do" = ()

@@ -4,6 +4,7 @@ type action = MoveLeft
             | MoveDown
             | MoveCenter
             | Undo
+            | SetSettables
             | Toggle of int
             | SetValue of int
             | NewGame of Loader.level

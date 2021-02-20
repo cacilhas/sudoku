@@ -34,6 +34,7 @@ let deal_with_press (sym, kmod) = match sym with
   | KEY_4 -> if kmod land kmod_ctrl != 0
              then Game.act (Action.NewGame Loader.Fiendish)
 
+  | KEY_SPACE -> Game.act Action.SetSettables
   | KEY_KP1 -> if kmod land kmod_shift = 0
                then Game.act (Action.Toggle 1)
                else Game.act (Action.SetValue 1)
