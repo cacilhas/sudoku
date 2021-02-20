@@ -70,7 +70,7 @@ Keys:
 - 2-key with Ctrl (`C-2`): new medium game.
 - 3-key with Ctrl (`C-3`): new hard game.
 - 4-key with Ctrl (`C-4`): new fiendish game.
-- Space (`space`): run Full House algorithm for the current group.
+- Space (`space`): set current cell if it’s a single-candidate.
 - Space with Shift (`S-space`): run Full House algorithm for the entire board.
 - Space with Shift and Ctrl (`C-S-space`): run aggressive Full House algorithm.
 - Esc (`escape`): quit.

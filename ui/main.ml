@@ -39,7 +39,7 @@ let deal_with_press (sym, kmod) = match sym with
                                    else if kmod land kmod_shift != 0
                                    then Solve.Normal
                                    else let (x, y) = Game.the_player () in
-                                        Solve.Group (x, y))
+                                        Solve.SetCell (x, y))
                  |> Game.act
 
   | KEY_KP1 -> if kmod land kmod_shift = 0
