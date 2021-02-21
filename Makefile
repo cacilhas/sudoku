@@ -3,8 +3,9 @@ INSTALL= install --strip --mode=0755
 OC= dune
 RM= rm -f
 
+NAME= kodumaro-sudoku
 PREFIX?= $(HOME)/.local
-INSTALL_EXE= $(PREFIX)/bin/kodumaro-sudoku
+INSTALL_EXE= $(PREFIX)/bin/$(NAME)
 SOURCES= bin/* sudoku/* ui/*
 TARGET= _build/default/bin/sudoku.exe
 
@@ -26,12 +27,12 @@ test:
 
 install: $(TARGET)
 	$(INSTALL) $< $(INSTALL_EXE)
-	$(CP) kodumaro-sudoku.png $(PREFIX)/share/icons/hicolor/128x128/apps/
-	$(CP) kodumaro-sudoku.desktop $(PREFIX)/share/applications/
+	$(CP) $(NAME).png $(PREFIX)/share/icons/hicolor/128x128/apps/
+	$(CP) $(NAME).desktop $(PREFIX)/share/applications/
 
 
 uninstall:
-	$(RM) $(INSTALL_EXE) $(PREFIX)/share/icons/hicolor/128x128/apps/kodumaro-sudoku.png $(PREFIX)/share/applications/kodumaro-sudoku.desktop
+	$(RM) $(INSTALL_EXE) $(PREFIX)/share/icons/hicolor/128x128/apps/$(NAME).png $(PREFIX)/share/applications/$(NAME).desktop
 
 
 $(TARGET): $(SOURCES)
