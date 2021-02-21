@@ -90,7 +90,7 @@ let%test "Cell.cell with supplied value" =
   (new cell ~value:2 0)#value = 2
 
 let%test "Cell.cell should fail with invalid value" =
-  try new cell ~value:(-1) 0 |> ignore; false
+  try new cell ~value:~-1 0 |> ignore; false
   with Out_of_range (-1, (1, 9)) -> true
 
 let%test_unit "Cell.cell#is_set i should return whether the index is set" =
@@ -101,7 +101,7 @@ let%test_unit "Cell.cell#is_set i should return whether the index is set" =
   done
 
 let%test "Cell.cell#is_set (negative number) should fail" =
-  try (new cell 0)#is_set (-1) && false
+  try (new cell 0)#is_set ~-1 && false
   with Out_of_range (-1, (1, 9)) -> true
 
 let%test "Cell.cell#is_set (greater number) should fail" =

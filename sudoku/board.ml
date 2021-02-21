@@ -86,16 +86,16 @@ let%test_unit "Board.board should start zeroed" =
     done
   done
 
-let%test "Board.board#get (-1) 0 should raise an exception" =
-  try (new board ())#get (-1) 0 |> ignore; false
+let%test "Board.board#get ~-1 0 should raise an exception" =
+  try (new board ())#get ~-1 0 |> ignore; false
   with Out_of_range (-1, (0, 8)) -> true
 
 let%test "Board.board#get 9 0 should raise an exception" =
   try (new board ())#get 9 0 |> ignore; false
   with Out_of_range (9, (0, 8)) -> true
 
-let%test "Board.board#get 0 (-1) should raise an exception" =
-  try (new board ())#get 0 (-1) |> ignore; false
+let%test "Board.board#get 0 ~-1 should raise an exception" =
+  try (new board ())#get 0 ~-1 |> ignore; false
   with Out_of_range (-1, (0, 8)) -> true
 
 let%test "Board.board#get 0 9 should raise an exception" =

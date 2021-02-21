@@ -18,7 +18,7 @@ let update_board new_board =
     then index := i
     else if i = !index
     then begin
-      index := !index + 1
+      incr index
     ; boards.(!index) <- new_board
     end
     else loop (i+1)
