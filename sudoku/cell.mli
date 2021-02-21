@@ -1,11 +1,13 @@
 class cell : ?value:int -> int -> object
 
-  method clear    : int -> unit
-  method is_set   : int -> bool
-  method set      : int -> unit
-  method settable : int
-  method toggle   : int -> unit
-  method value    : int
-  method string   : string
-  method clone    : int -> cell
+  method candidates_from : char array -> cell
+  method clear           : int -> cell
+  method is_set          : int -> bool
+  method set             : int -> cell
+  method settable        : int
+  method toggle          : int -> cell
+  method value           : int
+  method string          : string
+  method clone           : int -> cell
+  method compare         : cell -> int
 end
