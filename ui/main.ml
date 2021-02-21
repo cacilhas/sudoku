@@ -141,7 +141,7 @@ let rec loop screen table =
 let mainloop () =
   Sdl.init [`VIDEO]
 ; at_exit Sdl.quit
-; Sdlwm.set_caption ~title:"Kodumaro Sudoku" ~icon:"sudoku"
+; Sdlwm.set_caption ~title:"Kodumaro Sudoku" ~icon:"kodumaro-sudoku"
 ; Sdlevent.enable_events Sdlevent.keydown_mask
 ; let screen = Sdlvideo.set_video_mode ~w:tsize.w ~h:tsize.h ~bpp:32 screen_flags
   and table = Sdlvideo.create_RGB_surface [`HWSURFACE]
