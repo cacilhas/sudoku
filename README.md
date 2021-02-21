@@ -58,6 +58,14 @@ sudo make PREFIX=/usr/local install
 
 ## Playing
 
+The help text is shown by the command:
+
+```sh
+kodumaro-sudoku -h
+# or
+kodumaro-sudoku --help
+```
+
 Keys:
 
 - Keypad numbers (`KP1`, `KP2`…): change the candidate flag.
@@ -65,6 +73,7 @@ Keys:
 - Arrows or WASD (`w`, `a`, `s`, `d`): move the player position.
 - C-key (`c`): center the player.
 - U-key (`u`): undo value set.
+- R-key with Ctrl (`C-r`): restart current game.
 - N-key with Ctrl (`C-n`): new hard game.
 - 1-key with Ctrl (`C-1`): new easy game.
 - 2-key with Ctrl (`C-2`): new medium game.
