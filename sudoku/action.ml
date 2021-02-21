@@ -4,8 +4,9 @@ type action = MoveLeft
             | MoveDown
             | MoveCenter
             | Undo
+            | Restart
             | FullHouse of Solve.solve_tpe
-            | Toggle of int
-            | SetValue of int
             | NewGame of Loader.level
+            | SetValue of int
+            | Toggle of int
 

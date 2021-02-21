@@ -30,6 +30,7 @@ let act the_action = match the_action with
   | MoveUp        -> let (x, y) = !player in player := (x, (y + 8) mod 9)
   | MoveDown      -> let (x, y) = !player in player := (x, (y + 1) mod 9)
   | MoveCenter    -> player := (4, 4)
+  | Restart       -> index := 0
   | Undo          -> index := max 0 (!index - 1)
   | FullHouse tpe -> Solve.Full_house.solve (the_board ()) tpe |> update_board
   | Toggle i      -> let (x, y) = !player in

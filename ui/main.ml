@@ -24,6 +24,8 @@ let deal_with_press (sym, kmod) = match sym with
   | KEY_c     -> Game.act Action.MoveCenter
 
   | KEY_u -> Game.act Action.Undo
+  | KEY_r -> if kmod land kmod_ctrl != 0
+             then Game.act Action.Restart
   | KEY_1 -> if kmod land kmod_ctrl != 0
              then Game.act (Action.NewGame Loader.Easy)
   | KEY_2 -> if kmod land kmod_ctrl != 0
