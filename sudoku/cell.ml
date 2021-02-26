@@ -54,28 +54,27 @@ class cell ?value:(bound = 0) _ = object (self)
   method value = bound
 
   method string = match bound with
-    | 0     -> "."
-    | bound -> string_of_int bound
+  | 0     -> "."
+  | bound -> string_of_int bound
 
   method clone value =
     if not (value > 0 && self#is_set value)
     then (self :> cell)
     else (new cell ~value:value 0)#candidates_from candidates
 
-  method compare (other : cell) =
-    match compare bound other#value with
-      | 0    -> let rec loop i =
-                  let this = (if self#is_set i  then i else 0)
-                  and that = (if other#is_set i then i else 0) in
-                  let diff = compare this that in
-                  if diff != 0
-                  then diff
-                  else if i = 9
-                  then 0
-                  else loop (i+1)
-                in
-                loop 1
-      | diff -> diff
+  method compare (other : cell) = match compare bound other#value with
+  | 0    -> let rec loop i =
+              let this = (if self#is_set i  then i else 0)
+              and that = (if other#is_set i then i else 0) in
+              let diff = compare this that in
+              if diff != 0
+              then diff
+              else if i = 9
+              then 0
+              else loop (i+1)
+            in
+            loop 1
+  | diff -> diff
 end
 
 

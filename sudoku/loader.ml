@@ -3,10 +3,10 @@ open Board
 type level = Easy | Medium | Hard | Fiendish
 
 let string_of_level a_level = match a_level with
-  | Easy     -> "easy"
-  | Medium   -> "medium"
-  | Hard     -> "hard"
-  | Fiendish -> "fiendish"
+| Easy     -> "easy"
+| Medium   -> "medium"
+| Hard     -> "hard"
+| Fiendish -> "fiendish"
 
 let process_response res =
   let res = String.concat "" res

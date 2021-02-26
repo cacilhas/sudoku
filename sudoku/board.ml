@@ -63,10 +63,10 @@ class board ?cells:(cells = new_cell_list ()) _ = object (self)
       let this = self#get x y
       and that = other#get x y in
       match this#compare that with
-        | 0    -> if i = 80
-                  then 0
-                  else loop (i+1)
-        | diff -> diff
+      | 0    -> if i = 80
+                then 0
+                else loop (i+1)
+      | diff -> diff
     in
     loop 0
 end

@@ -17,20 +17,20 @@ module Pixel_info : PIXEL_INFO = struct
 end
 
 let get_bg_color x y = match ((x/3) + (y/3)) mod 2 with
-  | 0 -> (92, 92, 92)
-  | _ -> (156, 156, 156)
+| 0 -> (92, 92, 92)
+| _ -> (156, 156, 156)
 
 
 let get_fg_color i = match i with
-  | 1 -> (222,   0,   0)
-  | 2 -> (255, 160,   0)
-  | 3 -> (255, 255,   0)
-  | 4 -> (  0, 255,   0)
-  | 5 -> (  0, 192, 255)
-  | 6 -> ( 96,   0, 222)
-  | 7 -> (192,  96, 255)
-  | 8 -> (192,  64, 192)
-  | _ -> (184, 184, 184)
+| 1 -> (222,   0,   0)
+| 2 -> (255, 160,   0)
+| 3 -> (255, 255,   0)
+| 4 -> (  0, 255,   0)
+| 5 -> (  0, 192, 255)
+| 6 -> ( 96,   0, 222)
+| 7 -> (192,  96, 255)
+| 8 -> (192,  64, 192)
+| _ -> (184, 184, 184)
 
 
 let create_square_surface (w, h) =
@@ -46,10 +46,10 @@ let create_square_surface (w, h) =
 let coordinates (where : [`Top | `Center]) (tpe : [`Large | `Small]) (i : int)
 : (int * int) * int =
   match (where, tpe) with
-    | (`Top,    `Small) -> ((26*(i-1),      82), 26)
-    | (`Top,    `Large) -> ((82*(i-1),       0), 82)
-    | (`Center, `Small) -> ((26*(i-1) + 13, 95), 12)
-    | (`Center, `Large) -> ((82*(i-1) + 41, 41), 40)
+  | (`Top,    `Small) -> ((26*(i-1),      82), 26)
+  | (`Top,    `Large) -> ((82*(i-1),       0), 82)
+  | (`Center, `Small) -> ((26*(i-1) + 13, 95), 12)
+  | (`Center, `Large) -> ((82*(i-1) + 41, 41), 40)
 
 
 let circles =

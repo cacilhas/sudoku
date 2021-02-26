@@ -11,68 +11,68 @@ let kmod_shift = kmod_lshift lor kmod_rshift
 
 
 let deal_with_press (sym, kmod) = match sym with
-  | KEY_ESCAPE -> exit 0
+| KEY_ESCAPE -> exit 0
 
-  | KEY_UP
-  | KEY_w     -> Game.act Action.MoveUp
-  | KEY_DOWN
-  | KEY_s     -> Game.act Action.MoveDown
-  | KEY_LEFT
-  | KEY_a     -> Game.act Action.MoveLeft
-  | KEY_RIGHT
-  | KEY_d     -> Game.act Action.MoveRight
-  | KEY_c     -> Game.act Action.MoveCenter
+| KEY_UP
+| KEY_w     -> Game.act Action.MoveUp
+| KEY_DOWN
+| KEY_s     -> Game.act Action.MoveDown
+| KEY_LEFT
+| KEY_a     -> Game.act Action.MoveLeft
+| KEY_RIGHT
+| KEY_d     -> Game.act Action.MoveRight
+| KEY_c     -> Game.act Action.MoveCenter
 
-  | KEY_u -> Game.act Action.Undo
-  | KEY_r -> if kmod land kmod_ctrl != 0
-             then Game.act Action.Restart
-  | KEY_1 -> if kmod land kmod_ctrl != 0
-             then Game.act (Action.NewGame Loader.Easy)
-  | KEY_2 -> if kmod land kmod_ctrl != 0
-             then Game.act (Action.NewGame Loader.Medium)
-  | KEY_3
-  | KEY_n -> if kmod land kmod_ctrl != 0
-             then Game.act (Action.NewGame Loader.Hard)
-  | KEY_4 -> if kmod land kmod_ctrl != 0
-             then Game.act (Action.NewGame Loader.Fiendish)
+| KEY_u -> Game.act Action.Undo
+| KEY_r -> if kmod land kmod_ctrl != 0
+            then Game.act Action.Restart
+| KEY_1 -> if kmod land kmod_ctrl != 0
+            then Game.act (Action.NewGame Loader.Easy)
+| KEY_2 -> if kmod land kmod_ctrl != 0
+            then Game.act (Action.NewGame Loader.Medium)
+| KEY_3
+| KEY_n -> if kmod land kmod_ctrl != 0
+            then Game.act (Action.NewGame Loader.Hard)
+| KEY_4 -> if kmod land kmod_ctrl != 0
+            then Game.act (Action.NewGame Loader.Fiendish)
 
-  | KEY_SPACE -> Action.FullHouse (if (kmod land kmod_shift) * (kmod land kmod_ctrl) != 0
-                                   then Solve.Hungry
-                                   else if kmod land kmod_shift != 0
-                                   then Solve.Normal
-                                   else let (x, y) = Game.the_player () in
-                                        Solve.SetCell (x, y))
-                 |> Game.act
+| KEY_SPACE -> Action.FullHouse (if (kmod land kmod_shift) * (kmod land kmod_ctrl) != 0
+                                  then Solve.Hungry
+                                  else if kmod land kmod_shift != 0
+                                  then Solve.Normal
+                                  else let (x, y) = Game.the_player () in
+                                      Solve.SetCell (x, y))
+                |> Game.act
 
-  | KEY_KP1 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 1)
-               else Game.act (Action.SetValue 1)
-  | KEY_KP2 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 2)
-               else Game.act (Action.SetValue 2)
-  | KEY_KP3 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 3)
-               else Game.act (Action.SetValue 3)
-  | KEY_KP4 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 4)
-               else Game.act (Action.SetValue 4)
-  | KEY_KP5 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 5)
-               else Game.act (Action.SetValue 5)
-  | KEY_KP6 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 6)
-               else Game.act (Action.SetValue 6)
-  | KEY_KP7 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 7)
-               else Game.act (Action.SetValue 7)
-  | KEY_KP8 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 8)
-               else Game.act (Action.SetValue 8)
-  | KEY_KP9 -> if kmod land kmod_shift = 0
-               then Game.act (Action.Toggle 9)
-               else Game.act (Action.SetValue 9)
+| KEY_KP1 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 1)
+              else Game.act (Action.SetValue 1)
+| KEY_KP2 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 2)
+              else Game.act (Action.SetValue 2)
+| KEY_KP3 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 3)
+              else Game.act (Action.SetValue 3)
+| KEY_KP4 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 4)
+              else Game.act (Action.SetValue 4)
+| KEY_KP5 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 5)
+              else Game.act (Action.SetValue 5)
+| KEY_KP6 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 6)
+              else Game.act (Action.SetValue 6)
+| KEY_KP7 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 7)
+              else Game.act (Action.SetValue 7)
+| KEY_KP8 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 8)
+              else Game.act (Action.SetValue 8)
+| KEY_KP9 -> if kmod land kmod_shift = 0
+              then Game.act (Action.Toggle 9)
+              else Game.act (Action.SetValue 9)
 
-  | _ -> ()
+| _ -> ()
 
 
 let deal_with_resize (w, h) =
@@ -133,9 +133,9 @@ let rec loop screen table =
 ; Sdlvideo.flip screen
 ; begin
     match Sdlevent.wait_event () with
-      | Sdlevent.KEYDOWN evt        -> deal_with_press (evt.keysym, evt.keymod)
-      | Sdlevent.VIDEORESIZE (w, h) -> assert (deal_with_resize (w, h) = screen)
-      | _                           -> ()
+    | Sdlevent.KEYDOWN evt        -> deal_with_press (evt.keysym, evt.keymod)
+    | Sdlevent.VIDEORESIZE (w, h) -> assert (deal_with_resize (w, h) = screen)
+    | _                           -> ()
   end
 ; loop screen table
 
