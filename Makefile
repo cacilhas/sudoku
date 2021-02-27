@@ -5,7 +5,10 @@ RM= rm -f
 
 NAME= kodumaro-sudoku
 PREFIX?= $(HOME)/.local
-INSTALL_EXE= $(PREFIX)/bin/$(NAME)
+BIN_DIR= $(PREFIX)/bin/
+ICONS_DIR= $(PREFIX)/share/icons/hicolor/128x128/apps/
+APPLICATIONS_DIR= $(PREFIX)/share/applications/
+INSTALL_EXE= $(BIN_DIR)/$(NAME)
 SOURCES= bin/* sudoku/* ui/*
 TARGET= _build/default/bin/sudoku.exe
 
@@ -26,9 +29,12 @@ test:
 
 
 install: $(TARGET)
+	@test -e $(BIN_DIR) || mkdir -p $(BIN_DIR)
+	@test -e $(ICONS_DIR) || mkdir -p $(ICONS_DIR)
+	@test -e $(APPLICATIONS_DIR) || mkdir -p $(APPLICATIONS_DIR)
 	$(INSTALL) $< $(INSTALL_EXE)
-	$(CP) $(NAME).png $(PREFIX)/share/icons/hicolor/128x128/apps/
-	$(CP) $(NAME).desktop $(PREFIX)/share/applications/
+	$(CP) $(NAME).png $(ICONS_DIR)
+	$(CP) $(NAME).desktop $(APPLICATIONS_DIR)
 
 
 uninstall:
