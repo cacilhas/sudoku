@@ -1,6 +1,6 @@
 open Board
 
-type level = [`Easy | `Medium | `Hard | `Fiendish]
+type level = [%import: Loader.level]
 
 let string_of_level a_level = match a_level with
 | `Easy     -> "easy"

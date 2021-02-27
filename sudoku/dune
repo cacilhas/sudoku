@@ -2,4 +2,4 @@
   (name sudoku)
   (inline_tests)
   (libraries str unix)
-  (preprocess (pps ppx_inline_test)))
+  (preprocess (staged_pps ppx_inline_test ppx_import)))

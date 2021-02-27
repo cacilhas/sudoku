@@ -1,8 +1,5 @@
-type t = [`SetCell of int * int | `Normal | `Hungry]
-
-module type FULL_HOUSE = sig
-  val solve : Board.board -> t -> Board.board
-end
+type t = [%import: Solve.t]
+module type FULL_HOUSE = [%import: (module Solve.FULL_HOUSE)]
 
 module Full_house : FULL_HOUSE = struct
 
