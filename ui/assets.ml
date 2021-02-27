@@ -7,13 +7,13 @@ let get_bg_color x y =
 
 
 let get_fg_color i = match i with
-| 1 -> 0xffde0000l
-| 2 -> 0xffffa000l
-| 3 -> 0xffffff00l
+| 1 -> 0xff0000del
+| 2 -> 0xff00a0ffl
+| 3 -> 0xff00ffffl
 | 4 -> 0xff00ff00l
-| 5 -> 0xff00c0ffl
-| 6 -> 0xff6000del
-| 7 -> 0xffc060ffl
+| 5 -> 0xffffc000l
+| 6 -> 0xffde0060l
+| 7 -> 0xffff60c0l
 | 8 -> 0xffc040c0l
 | _ -> 0xffb8b8b8l
 
