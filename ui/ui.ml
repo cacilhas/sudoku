@@ -113,7 +113,8 @@ let render_board surface (board : Board.board) =
 
 let render_player screen (x, y) =
   let rect = Rect.make ~pos:(x*84, y*84) ~dims:(84, 84) in
-  Surface.fill_rect ~dst:screen ~rect:rect ~color:0xffffffffl
+  Surface.fill_rect ~dst:screen ~rect:rect
+                    ~color:(Surface.rgb_color ~rgb:(0xff, 0xff, 0xff))
 
 let render_table screen table =
   let width = Surface.get_width screen
@@ -128,10 +129,11 @@ let render_table screen table =
 
 
 let rec loop window table =
-  let screen = Window.get_surface window in
-  let bg_rect = Rect.make ~pos:(0, 0) ~dims:(tsize.w, tsize.h) in
-  Surface.fill_rect ~dst:screen ~rect:bg_rect ~color:0xff000000l
-; Surface.fill_rect ~dst:table  ~rect:bg_rect ~color:0xff000000l
+  let screen = Window.get_surface window
+  and bg_color = Surface.rgb_color ~rgb:(0x00, 0x00, 0x00)
+  and bg_rect = Rect.make ~pos:(0, 0) ~dims:(tsize.w, tsize.h) in
+  Surface.fill_rect ~dst:screen ~rect:bg_rect ~color:bg_color
+; Surface.fill_rect ~dst:table  ~rect:bg_rect ~color:bg_color
 ; Game.the_player () |> render_player table
 ; Game.the_board  () |> render_board table
 ; render_table screen table

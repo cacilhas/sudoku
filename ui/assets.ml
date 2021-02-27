@@ -2,20 +2,20 @@ open Sdl
 
 let get_bg_color x y =
   if ((x/3) + (y/3)) mod 2 = 0
-  then 0xff5c5c5cl
-  else 0xff9c9c9cl
+  then Surface.rgb_color ~rgb:(0x5c, 0x5c, 0x5c)
+  else Surface.rgb_color ~rgb:(0x9c, 0x9c, 0x9c)
 
 
 let get_fg_color i = match i with
-| 1 -> 0xff0000del
-| 2 -> 0xff00a0ffl
-| 3 -> 0xff00ffffl
-| 4 -> 0xff00ff00l
-| 5 -> 0xffffc000l
-| 6 -> 0xffde0060l
-| 7 -> 0xffff60c0l
-| 8 -> 0xffc040c0l
-| _ -> 0xffb8b8b8l
+| 1 -> Surface.rgb_color ~rgb:(0xde, 0x00, 0x00)
+| 2 -> Surface.rgb_color ~rgb:(0xff, 0xa0, 0x00)
+| 3 -> Surface.rgb_color ~rgb:(0xff, 0xff, 0x00)
+| 4 -> Surface.rgb_color ~rgb:(0x00, 0xff, 0x00)
+| 5 -> Surface.rgb_color ~rgb:(0x00, 0xc0, 0xff)
+| 6 -> Surface.rgb_color ~rgb:(0x60, 0x00, 0xde)
+| 7 -> Surface.rgb_color ~rgb:(0xc0, 0x06, 0xff)
+| 8 -> Surface.rgb_color ~rgb:(0xc0, 0x40, 0xc0)
+| _ -> Surface.rgb_color ~rgb:(0xb8, 0xb8, 0xb8)
 
 
 let create_square_surface (w, h) =
