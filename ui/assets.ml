@@ -1,8 +1,9 @@
 open Sdl
 
-let get_bg_color x y = match ((x/3) + (y/3)) mod 2 with
-| 0 -> 0x5c5c5cffl
-| _ -> 0x9c9c9cffl
+let get_bg_color x y =
+  if ((x/3) + (y/3)) mod 2 = 0
+  then 0x5c5c5cffl
+  else 0x9c9c9cffl
 
 
 let get_fg_color i = match i with

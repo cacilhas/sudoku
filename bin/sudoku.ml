@@ -19,10 +19,13 @@ let help () =
 ; print_endline "  \027[33mS-KP9\027[0m – set cell as 9"
 ; print_endline "  \027[33mSpace\027[0m – set single-candidate cell"
 ; print_endline "  \027[33mS-Space\027[0m – run Full House algorithm"
-; print_endline "  \027[33mC-S-Space\027[0m – run aggressive Full House algorithm"
+; print_endline
+    "  \027[33mC-S-Space\027[0m – run aggressive Full House algorithm"
 ; print_endline "  \027[33mu\027[0m – undo"
-; print_endline "  \027[33ma\027[0m or \027[33mLeft\027[0m – move player left"
-; print_endline "  \027[33md\027[0m or \027[33mRight\027[0m – move player right"
+; print_endline
+    "  \027[33ma\027[0m or \027[33mLeft\027[0m – move player left"
+; print_endline
+    "  \027[33md\027[0m or \027[33mRight\027[0m – move player right"
 ; print_endline "  \027[33ms\027[0m or \027[33mDown\027[0m – move player down"
 ; print_endline "  \027[33mw\027[0m or \027[33mUp\027[0m – move player up"
 ; print_endline "  \027[33mC-c\027[0m – center player"
@@ -34,6 +37,7 @@ let help () =
 
 
 let () =
-  if (Array.exists ((=) "-h") Sys.argv) || (Array.exists ((=) "--help") Sys.argv)
+  if (Array.exists ((=) "-h") Sys.argv)
+  || (Array.exists ((=) "--help") Sys.argv)
   then help ()
   else Ui.mainloop ()

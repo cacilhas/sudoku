@@ -1,12 +1,12 @@
 open Board
 
-type level = Easy | Medium | Hard | Fiendish
+type level = [`Easy | `Medium | `Hard | `Fiendish]
 
 let string_of_level a_level = match a_level with
-| Easy     -> "easy"
-| Medium   -> "medium"
-| Hard     -> "hard"
-| Fiendish -> "fiendish"
+| `Easy     -> "easy"
+| `Medium   -> "medium"
+| `Hard     -> "hard"
+| `Fiendish -> "fiendish"
 
 let process_response res =
   let res = String.concat "" res
@@ -27,9 +27,9 @@ let create_board a_level =
   and ign = Str.regexp "%" in
   let rec loop acc =
     try let line = input_line chan in
-      if not (Str.string_match ign line 0)
-      then loop ((String.trim line) :: acc)
-      else loop acc
+      if Str.string_match ign line 0
+      then loop acc
+      else loop ((String.trim line) :: acc)
     with End_of_file -> begin
       Unix.close_process_in chan |> ignore
     ; acc

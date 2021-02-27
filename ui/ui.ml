@@ -8,61 +8,77 @@ let tsize   = { w = 756 ; h = 756 }
 let deal_with_press kmod = function
 | Scancode.ESCAPE -> exit 0
 | Scancode.UP
-| Scancode.W     -> Game.act Action.MoveUp
+| Scancode.W     -> Game.act `MoveUp
 | Scancode.DOWN
-| Scancode.S     -> Game.act Action.MoveDown
+| Scancode.S     -> Game.act `MoveDown
 | Scancode.LEFT
-| Scancode.A     -> Game.act Action.MoveLeft
+| Scancode.A     -> Game.act `MoveLeft
 | Scancode.RIGHT
-| Scancode.D     -> Game.act Action.MoveRight
-| Scancode.C     -> Game.act Action.MoveCenter
-| Scancode.U     -> Game.act Action.Undo
-| Scancode.R     -> if List.mem Keymod.LCtrl kmod || List.mem Keymod.RCtrl kmod
-                    then Game.act Action.Restart
-| Scancode.Num1  -> if List.mem Keymod.LCtrl kmod || List.mem Keymod.RCtrl kmod
-                    then Game.act (Action.NewGame Loader.Easy)
-| Scancode.Num2  -> if List.mem Keymod.LCtrl kmod || List.mem Keymod.RCtrl kmod
-                    then Game.act (Action.NewGame Loader.Medium)
+| Scancode.D     -> Game.act `MoveRight
+| Scancode.C     -> Game.act `MoveCenter
+| Scancode.U     -> Game.act `Undo
+| Scancode.R     -> if List.mem Keymod.LCtrl kmod
+                    || List.mem Keymod.RCtrl kmod
+                    then Game.act `Restart
+| Scancode.Num1  -> if List.mem Keymod.LCtrl kmod
+                    || List.mem Keymod.RCtrl kmod
+                    then Game.act (`NewGame `Easy)
+| Scancode.Num2  -> if List.mem Keymod.LCtrl kmod
+                    || List.mem Keymod.RCtrl kmod
+                    then Game.act (`NewGame `Medium)
 | Scancode.Num3
-| Scancode.N     -> if List.mem Keymod.LCtrl kmod || List.mem Keymod.RCtrl kmod
-                    then Game.act (Action.NewGame Loader.Hard)
-| Scancode.Num4  -> if List.mem Keymod.LCtrl kmod || List.mem Keymod.RCtrl kmod
-                    then Game.act (Action.NewGame Loader.Fiendish)
-| Scancode.SPACE -> Action.FullHouse (
-                      if List.mem Keymod.LCtrl kmod || List.mem Keymod.RCtrl kmod
+| Scancode.N     -> if List.mem Keymod.LCtrl kmod
+                    || List.mem Keymod.RCtrl kmod
+                    then Game.act (`NewGame `Hard)
+| Scancode.Num4  -> if List.mem Keymod.LCtrl kmod
+                    || List.mem Keymod.RCtrl kmod
+                    then Game.act (`NewGame `Fiendish)
+| Scancode.SPACE -> `FullHouse (
+                      if List.mem Keymod.LCtrl kmod
+                      || List.mem Keymod.RCtrl kmod
                       then `Hungry
-                      else if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
+                      else if List.mem Keymod.LShift kmod
+                           || List.mem Keymod.RShift kmod
                       then `Normal
                       else let (x, y) = Game.the_player () in
                       `SetCell (x, y)
                     ) |> Game.act
-| Scancode.KP_1  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 1)
-                    else Game.act (Action.SetValue 1)
-| Scancode.KP_2  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 2)
-                    else Game.act (Action.SetValue 2)
-| Scancode.KP_3  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 3)
-                    else Game.act (Action.SetValue 3)
-| Scancode.KP_4  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 4)
-                    else Game.act (Action.SetValue 4)
-| Scancode.KP_5  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 5)
-                    else Game.act (Action.SetValue 5)
-| Scancode.KP_6  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 6)
-                    else Game.act (Action.SetValue 6)
-| Scancode.KP_7  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 7)
-                    else Game.act (Action.SetValue 7)
-| Scancode.KP_8  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 8)
-                    else Game.act (Action.SetValue 8)
-| Scancode.KP_9  -> if List.mem Keymod.LShift kmod || List.mem Keymod.RShift kmod
-                    then Game.act (Action.Toggle 9)
-                    else Game.act (Action.SetValue 9)
+| Scancode.KP_1  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 1)
+                    else Game.act (`SetValue 1)
+| Scancode.KP_2  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 2)
+                    else Game.act (`SetValue 2)
+| Scancode.KP_3  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 3)
+                    else Game.act (`SetValue 3)
+| Scancode.KP_4  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 4)
+                    else Game.act (`SetValue 4)
+| Scancode.KP_5  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 5)
+                    else Game.act (`SetValue 5)
+| Scancode.KP_6  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 6)
+                    else Game.act (`SetValue 6)
+| Scancode.KP_7  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 7)
+                    else Game.act (`SetValue 7)
+| Scancode.KP_8  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 8)
+                    else Game.act (`SetValue 8)
+| Scancode.KP_9  -> if List.mem Keymod.LShift kmod
+                    || List.mem Keymod.RShift kmod
+                    then Game.act (`Toggle 9)
+                    else Game.act (`SetValue 9)
 | _ -> ()
 
 
@@ -107,7 +123,8 @@ let render_table window table =
   and y = (height - tsize.h) / 2 in
   let dst_rect = Rect.make ~pos:(x, y) ~dims:(tsize.w, tsize.h)
   and src_rect = Rect.make ~pos:(0, 0) ~dims:(tsize.w, tsize.h) in
-  Surface.blit_surface ~src:table ~src_rect:src_rect ~dst:screen ~dst_rect:dst_rect
+  Surface.blit_surface ~src:table  ~src_rect:src_rect
+                       ~dst:screen ~dst_rect:dst_rect
   |> ignore
 
 

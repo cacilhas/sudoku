@@ -34,7 +34,8 @@ let shade surface (x, y) xradius color =
   for yradius = (xradius*2/5) to xradius do
     let xradius = float_of_int xradius
     and yradius = float_of_int yradius in
-    let shadow = shadow_color color ((xradius -. (yradius /. 2.0)) /. xradius) in
+    let shadow = shadow_color color
+                   ((xradius -. (yradius /. 2.0)) /. xradius) in
     for degree = 0 to 180 do
       let rad = rad_of_degree degree in
       let xf = (cos rad) *. xradius

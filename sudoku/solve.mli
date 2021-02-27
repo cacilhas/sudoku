@@ -1,4 +1,4 @@
-type t = [ `SetCell of (int * int) | `Normal | `Hungry ]
+type t = [`SetCell of (int * int) | `Normal | `Hungry]
 
 module type FULL_HOUSE = sig
   val solve : Board.board -> t -> Board.board

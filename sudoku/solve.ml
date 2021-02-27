@@ -1,4 +1,4 @@
-type t = [ `SetCell of int * int | `Normal | `Hungry ]
+type t = [`SetCell of int * int | `Normal | `Hungry]
 
 module type FULL_HOUSE = sig
   val solve : Board.board -> t -> Board.board
@@ -28,13 +28,14 @@ module Full_house : FULL_HOUSE = struct
   let solve_hungry board =
     let rec loop cur idx =
       let (x, y) = xy_from_index idx in
-      begin
-        match (cur#get x y)#settable with
-        | 0     -> if idx = 80
-                    then cur
-                    else loop cur (idx + 1)
-        | value -> loop (cur#set x y value) 0
+      let value = (cur#get x y)#settable in
+      if value = 0
+      then begin
+        if idx = 80
+        then cur
+        else loop cur (idx + 1)
       end
+      else loop (cur#set x y value) 0
     in loop board 0
 
   let solve board tpe = match tpe with

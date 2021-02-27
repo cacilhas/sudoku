@@ -62,11 +62,14 @@ class board ?cells:(cells = new_cell_list ()) _ = object (self)
       and x = i mod 9 in
       let this = self#get x y
       and that = other#get x y in
-      match this#compare that with
-      | 0    -> if i = 80
-                then 0
-                else loop (i+1)
-      | diff -> diff
+      let diff = this#compare that in
+      if diff = 0
+      then begin
+        if i = 80
+        then 0
+        else loop (i+1)
+      end
+      else diff
     in
     loop 0
 end
@@ -82,7 +85,9 @@ let%test_unit "Board.board should start zeroed" =
     for x = 0 to 8 do
       let got = (a_board#get x y)#value in
       if got != 0
-      then Failure (Printf.sprintf "cell %d,%d expected to be zero, got %d" x y got) |> raise
+      then Failure
+        (Printf.sprintf "cell %d,%d expected to be zero, got %d" x y got)
+        |> raise
     done
   done
 
@@ -110,10 +115,15 @@ let%test_unit "Board.board#set 3 4 5 should return a new board" =
       if x = 3 || y = 4 || (x/3 = 1 && y/3 = 1)
       then begin
         if the_cell#is_set 5
-        then Failure (Printf.sprintf "cell %d,%d should be unset" x y) |> raise
+        then Failure
+          (Printf.sprintf "cell %d,%d should be unset" x y)
+          |> raise
       end
-      else if not (the_cell#is_set 5)
-           then Failure (Printf.sprintf "cell %d,%d should be set" x y) |> raise
+      else if the_cell#is_set 5
+           then ()
+           else Failure
+            (Printf.sprintf "cell %d,%d should be set" x y)
+            |> raise
     done
   done
 ; if (a_board#get 3 4)#value != 5
@@ -126,7 +136,9 @@ let%test_unit "Board.board#set 0 0 1 should fail if cell is unset" =
     for x = 0 to 8 do
       let got = (a_board#get x y)#value in
       if got != 0
-      then Failure (Printf.sprintf "cell %d,%d should be 0, got %d" x y got) |> raise
+      then Failure
+        (Printf.sprintf "cell %d,%d should be 0, got %d" x y got)
+        |> raise
     done
   done
 

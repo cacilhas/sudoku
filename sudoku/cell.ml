@@ -6,7 +6,9 @@ class cell ?value:(bound = 0) _ = object (self)
 
   val validate_index =
     let valid = fun i -> i >= 1 && i <= 9 in
-    fun i -> if not (valid i) then Out_of_range (i, (1, 9)) |> raise
+    fun i -> if valid i
+             then ()
+             else Out_of_range (i, (1, 9)) |> raise
 
   initializer
     if bound != 0
@@ -20,8 +22,9 @@ class cell ?value:(bound = 0) _ = object (self)
 
   method private set' i value =
     validate_index i
-  ; if not (value = 0 || value = i)
-    then Out_of_range (value, (0, i)) |> raise
+  ; if value = 0 || value = i
+    then ()
+    else Out_of_range (value, (0, i)) |> raise
   ; let new_candidates = Array.copy candidates in
     new_candidates.(i-1) <- char_of_int value
   ; (new cell ~value:bound 0)#candidates_from new_candidates
@@ -53,28 +56,31 @@ class cell ?value:(bound = 0) _ = object (self)
 
   method value = bound
 
-  method string = match bound with
-  | 0     -> "."
-  | bound -> string_of_int bound
+  method string =
+    if bound = 0
+    then "."
+    else string_of_int bound
 
   method clone value =
-    if not (value > 0 && self#is_set value)
-    then (self :> cell)
-    else (new cell ~value:value 0)#candidates_from candidates
+    if (value > 0 && self#is_set value)
+    then (new cell ~value:value 0)#candidates_from candidates
+    else (self :> cell)
 
-  method compare (other : cell) = match compare bound other#value with
-  | 0    -> let rec loop i =
-              let this = (if self#is_set i  then i else 0)
-              and that = (if other#is_set i then i else 0) in
-              let diff = compare this that in
-              if diff != 0
-              then diff
-              else if i = 9
-              then 0
-              else loop (i+1)
-            in
-            loop 1
-  | diff -> diff
+  method compare (other : cell) =
+  let diff = compare bound other#value in
+  if diff = 0
+  then let rec loop i =
+         let this = (if self#is_set i  then i else 0)
+         and that = (if other#is_set i then i else 0) in
+         let diff = compare this that in
+         if diff != 0
+         then diff
+         else if i = 9
+         then 0
+         else loop (i+1)
+       in
+       loop 1
+  else diff
 end
 
 
@@ -95,8 +101,9 @@ let%test "Cell.cell should fail with invalid value" =
 let%test_unit "Cell.cell#is_set i should return whether the index is set" =
   let a_cell = new cell 0 in
   for i = 1 to 9 do
-    if not (a_cell#is_set i)
-    then Failure (Printf.sprintf "expected index %d to be set" i) |> raise
+    if a_cell#is_set i
+    then ()
+    else Failure (Printf.sprintf "expected index %d to be set" i) |> raise
   done
 
 let%test "Cell.cell#is_set (negative number) should fail" =
@@ -115,8 +122,9 @@ let%test_unit "Cell.cell#clear i should clear index" =
       if a_cell#is_set i
       then Failure (Printf.sprintf "expected index %d to be clear" i) |> raise
     end
-    else if not (a_cell#is_set i)
-         then Failure (Printf.sprintf "expected index %d to be set" i) |> raise
+    else if a_cell#is_set i
+         then ()
+         else Failure (Printf.sprintf "expected index %d to be set" i) |> raise
   done
 
 let%test "Cell.cell#set i should set index" =
@@ -143,12 +151,14 @@ let%test_unit "Cell.cell#toggle i should toggle index" =
       if a_cell#is_set i
       then Failure (Printf.sprintf "expected index %d to be clear" i) |> raise
     end
-    else if not (a_cell#is_set i)
-         then Failure (Printf.sprintf "expected index %d to be set" i) |> raise
+    else if a_cell#is_set i
+         then ()
+         else Failure (Printf.sprintf "expected index %d to be set" i) |> raise
   done
 ; let a_cell = a_cell#toggle 8 in
-  if not (a_cell#is_set 8)
-  then Failure "expected index 8 to be set back" |> raise
+  if a_cell#is_set 8
+  then ()
+  else Failure "expected index 8 to be set back" |> raise
 
 let%test "Cell.cell#string should return dot for an unset cell" =
   (new cell 0)#string = "."
