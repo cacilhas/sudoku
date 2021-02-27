@@ -45,40 +45,40 @@ let deal_with_press kmod = function
                     ) |> Game.act
 | Scancode.KP_1  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 1)
-                    else Game.act (`SetValue 1)
+                    then Game.act (`SetValue 1)
+                    else Game.act (`Toggle 1)
 | Scancode.KP_2  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 2)
-                    else Game.act (`SetValue 2)
+                    then Game.act (`SetValue 2)
+                    else Game.act (`Toggle 2)
 | Scancode.KP_3  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 3)
-                    else Game.act (`SetValue 3)
+                    then Game.act (`SetValue 3)
+                    else Game.act (`Toggle 3)
 | Scancode.KP_4  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 4)
-                    else Game.act (`SetValue 4)
+                    then Game.act (`SetValue 4)
+                    else Game.act (`Toggle 4)
 | Scancode.KP_5  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 5)
-                    else Game.act (`SetValue 5)
+                    then Game.act (`SetValue 5)
+                    else Game.act (`Toggle 5)
 | Scancode.KP_6  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 6)
-                    else Game.act (`SetValue 6)
+                    then Game.act (`SetValue 6)
+                    else Game.act (`Toggle 6)
 | Scancode.KP_7  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 7)
-                    else Game.act (`SetValue 7)
+                    then Game.act (`SetValue 7)
+                    else Game.act (`Toggle 7)
 | Scancode.KP_8  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 8)
-                    else Game.act (`SetValue 8)
+                    then Game.act (`SetValue 8)
+                    else Game.act (`Toggle 8)
 | Scancode.KP_9  -> if List.mem Keymod.LShift kmod
                     || List.mem Keymod.RShift kmod
-                    then Game.act (`Toggle 9)
-                    else Game.act (`SetValue 9)
+                    then Game.act (`SetValue 9)
+                    else Game.act (`Toggle 9)
 | _ -> ()
 
 
