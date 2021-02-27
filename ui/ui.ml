@@ -115,8 +115,7 @@ let render_player screen (x, y) =
   let rect = Rect.make ~pos:(x*84, y*84) ~dims:(84, 84) in
   Surface.fill_rect ~dst:screen ~rect:rect ~color:0xffffffffl
 
-let render_table window table =
-  let screen = Window.get_surface window in
+let render_table screen table =
   let width = Surface.get_width screen
   and height = Surface.get_height screen in
   let x = (width - tsize.w) / 2
@@ -128,29 +127,30 @@ let render_table window table =
   |> ignore
 
 
-let rec loop window render table =
-  Render.clear render
-; let bg_rect = Rect.make ~pos:(0, 0) ~dims:(tsize.w, tsize.h) in
-  Surface.fill_rect ~dst:table ~rect:bg_rect ~color:0x000000ffl
+let rec loop window table =
+  let screen = Window.get_surface window in
+  let bg_rect = Rect.make ~pos:(0, 0) ~dims:(tsize.w, tsize.h) in
+  Surface.fill_rect ~dst:screen ~rect:bg_rect ~color:0xff000000l
+; Surface.fill_rect ~dst:table  ~rect:bg_rect ~color:0xff000000l
 ; Game.the_player () |> render_player table
 ; Game.the_board  () |> render_board table
-; render_table window table
-; Render.render_present render
+; render_table screen table
+; Window.update_surface window
 ; begin
     match Event.poll_event () with
     | Some (Event.KeyDown evt) -> deal_with_press evt.keymod evt.scancode
     | _                        -> ()
   end
-; loop window render table
+; loop window table
 
 
 let mainloop () =
   Init.init [`VIDEO]
 ; at_exit Quit.quit
-; let (window, render) = Render.create_window_and_renderer
-                         ~width:tsize.w ~height:tsize.h
-                         ~flags:[Window.Resizable; Window.Shown] in
-  Window.set_title ~window:window ~title:"Kodumaro Sudoku"
-; Render.set_draw_color ~rgb:(0x00, 0x00, 0x00) ~a:0xff render
+; let window = Window.create
+               ~title:"Kodumaro Sudoku"
+               ~pos:(`centered, `centered) ~dims:(tsize.w, tsize.h)
+               ~flags:[Window.Resizable; Window.Shown] in
+  at_exit (fun () -> Window.destroy window)
 ; let table = Surface.create_rgb ~width:tsize.w ~height:tsize.h ~depth:32 in
-  loop window render table
+  loop window table

@@ -2,22 +2,33 @@ open Sdl
 
 let shadow_color color factor =
   let factor = Float.pi *. factor /. 2.0 |> sin in
-  let r = Int32.unsigned_rem color 256l
+  let b = Int32.logand color 255l
           |> Int32.to_float
           |> ( *.) factor
           |> Int32.of_float
-          |> fun r -> Int32.shift_left r 24
-  and g = Int32.unsigned_rem (Int32.unsigned_div color 256l) 256l
+          |> Int32.logand 255l
+  and g = Int32.shift_right_logical color 8
+          |> Int32.logand 255l
           |> Int32.to_float
           |> ( *.) factor
           |> Int32.of_float
-          |> fun g -> Int32.shift_left g 16
-  and b = Int32.unsigned_rem (Int32.unsigned_div color 65536l) 256l
+          |> Int32.logand 255l
+          |> fun g -> Int32.shift_left g 8
+  and r = Int32.shift_right_logical color 16
+          |> Int32.logand 255l
           |> Int32.to_float
           |> ( *.) factor
           |> Int32.of_float
-          |> fun b -> Int32.shift_left b 8 in
-  Int32.logor r g |> Int32.logor b |> Int32.logor 0xffl
+          |> Int32.logand 255l
+          |> fun r -> Int32.shift_left r 16
+  and a = Int32.shift_right_logical color 24
+          |> Int32.logand 255l
+          |> Int32.to_float
+          |> ( *.) factor
+          |> Int32.of_float
+          |> Int32.logand 255l
+          |> fun a -> Int32.shift_left a 24 in
+  Int32.logor r g |> Int32.logor b |> Int32.logor a
 
 
 let rad_of_degree degree = (float_of_int degree) *. Float.pi /. 180.0

@@ -2,20 +2,20 @@ open Sdl
 
 let get_bg_color x y =
   if ((x/3) + (y/3)) mod 2 = 0
-  then 0x5c5c5cffl
-  else 0x9c9c9cffl
+  then 0xff5c5c5cl
+  else 0xff9c9c9cl
 
 
 let get_fg_color i = match i with
-| 1 -> 0xde0000ffl
-| 2 -> 0xffa000ffl
-| 3 -> 0xffff00ffl
-| 4 -> 0x00ff00ffl
-| 5 -> 0x00c0ffffl
-| 6 -> 0x6000deffl
-| 7 -> 0xc060ffffl
-| 8 -> 0xc040c0ffl
-| _ -> 0xb8b8b8ffl
+| 1 -> 0xffde0000l
+| 2 -> 0xffffa000l
+| 3 -> 0xffffff00l
+| 4 -> 0xff00ff00l
+| 5 -> 0xff00c0ffl
+| 6 -> 0xff6000del
+| 7 -> 0xffc060ffl
+| 8 -> 0xffc040c0l
+| _ -> 0xffb8b8b8l
 
 
 let create_square_surface (w, h) =
