@@ -5,7 +5,7 @@ type action = MoveLeft
             | MoveCenter
             | Undo
             | Restart
-            | FullHouse of Solve.solve_tpe
+            | FullHouse of Solve.t
             | NewGame of Loader.level
             | SetValue of int
             | Toggle of int

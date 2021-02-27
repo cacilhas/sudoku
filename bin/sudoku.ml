@@ -36,4 +36,4 @@ let help () =
 let () =
   if (Array.exists ((=) "-h") Sys.argv) || (Array.exists ((=) "--help") Sys.argv)
   then help ()
-  else Ui.Main.mainloop ()
+  else Ui.mainloop ()

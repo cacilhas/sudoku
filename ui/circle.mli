@@ -1,1 +1,3 @@
-val fill_circle : Sdlvideo.surface -> x:int -> y:int -> radius:int -> int32 -> unit
+open Sdl
+
+val fill_circle : Surface.t -> pos:(int * int) -> radius:int -> color:int32 -> unit

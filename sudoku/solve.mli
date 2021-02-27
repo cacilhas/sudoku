@@ -1,7 +1,7 @@
-type solve_tpe = SetCell of int * int | Normal | Hungry
+type t = [ `SetCell of (int * int) | `Normal | `Hungry ]
 
 module type FULL_HOUSE = sig
-  val solve : Board.board -> solve_tpe -> Board.board
+  val solve : Board.board -> t -> Board.board
 end
 
 module Full_house : FULL_HOUSE

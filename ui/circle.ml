@@ -1,12 +1,23 @@
-let shadow_color surface color factor =
+open Sdl
+
+let shadow_color color factor =
   let factor = Float.pi *. factor /. 2.0 |> sin in
   let r = Int32.unsigned_rem color 256l
-          |> Int32.to_float |> ( *.) factor |> int_of_float
+          |> Int32.to_float
+          |> ( *.) factor
+          |> Int32.of_float
+          |> fun r -> Int32.shift_left r 24
   and g = Int32.unsigned_rem (Int32.unsigned_div color 256l) 256l
-          |> Int32.to_float |> ( *.) factor |> int_of_float
+          |> Int32.to_float
+          |> ( *.) factor
+          |> Int32.of_float
+          |> fun g -> Int32.shift_left g 16
   and b = Int32.unsigned_rem (Int32.unsigned_div color 65536l) 256l
-          |> Int32.to_float |> ( *.) factor |> int_of_float in
-  Sdlvideo.map_RGB surface (r, g, b)
+          |> Int32.to_float
+          |> ( *.) factor
+          |> Int32.of_float
+          |> fun b -> Int32.shift_left b 8 in
+  Int32.logor r g |> Int32.logor b |> Int32.logor 0xffl
 
 
 let rad_of_degree degree = (float_of_int degree) *. Float.pi /. 180.0
@@ -23,7 +34,7 @@ let shade surface (x, y) xradius color =
   for yradius = (xradius*2/5) to xradius do
     let xradius = float_of_int xradius
     and yradius = float_of_int yradius in
-    let shadow = shadow_color surface color ((xradius -. (yradius /. 2.0)) /. xradius) in
+    let shadow = shadow_color color ((xradius -. (yradius /. 2.0)) /. xradius) in
     for degree = 0 to 180 do
       let rad = rad_of_degree degree in
       let xf = (cos rad) *. xradius
@@ -31,13 +42,13 @@ let shade surface (x, y) xradius color =
       let (xf, yf) = rotate (xf, yf) rotation in
       let sx = x + (int_of_float xf)
       and sy = y + (int_of_float yf) in
-      let rect = Sdlvideo.rect ~x:sx ~y:sy ~w:1 ~h:1 in
-      Sdlvideo.fill_rect ~rect:rect surface shadow
+      let rect = Rect.make ~pos:(sx, sy) ~dims:(1, 1) in
+      Surface.fill_rect ~dst:surface ~rect:rect ~color:shadow
     done
   done
 
 
-let fill_circle surface ~x ~y ~radius color =
+let fill_circle surface ~pos:(x, y) ~radius ~color =
   for degree = 0 to 90 do
     let rad = (float_of_int degree) *. Float.pi /. 180.0
     and radius = float_of_int radius in
@@ -49,7 +60,7 @@ let fill_circle surface ~x ~y ~radius color =
     and sy = y + (int_of_float y0)
     and wi = int_of_float (xf -. x0)
     and hei = int_of_float (yf -. y0) in
-    let rect = Sdlvideo.rect ~x:sx ~y:sy ~w:wi ~h:hei in
-    Sdlvideo.fill_rect ~rect:rect surface color
+    let rect = Rect.make ~pos:(sx, sy) ~dims:(wi, hei) in
+    Surface.fill_rect ~dst:surface ~rect:rect ~color:color
   done
 ; shade surface (x, y) radius color
