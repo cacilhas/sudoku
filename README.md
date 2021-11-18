@@ -8,7 +8,8 @@
 [make]: https://www.gnu.org/software/make/manual/make.html
 [ocaml]: https://ocaml.org/
 [opam]: https://opam.ocaml.org/
-[sudoku]: https://packages.debian.org/buster/sudoku
+[sudoku]: https://github.com/cinemast/sudoku
+[sudoku-deb]: https://packages.debian.org/buster/sudoku
 
 # Kodumaro Sudoku
 
@@ -27,7 +28,7 @@ Nothing.
 - An [OCaml compiler][ocaml]
 - [Opam][opam]
 - [Dune][dune]
-- [Sudoku package][sudoku]
+- [Sudoku package][sudoku-deb]
 
 Compiling:
 
