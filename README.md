@@ -8,10 +8,15 @@
 [make]: https://www.gnu.org/software/make/manual/make.html
 [ocaml]: https://ocaml.org/
 [opam]: https://opam.ocaml.org/
+[sudogo]: https://github.com/cacilhas/sudogo
 [sudoku]: https://github.com/cinemast/sudoku
 [sudoku-deb]: https://packages.debian.org/buster/sudoku
 
-# Kodumaro Sudoku
+# Kodumaro Sudoku [DEPRECATED]
+
+> **Deprecated message**
+>
+> Replaced by [Sudogo][sudogo].
 
 This is a GUI interface for Michael Kennett’s [Console-based Sudoku][sudoku] on
 [**GNU/Linux**][linux] and [**macOS**][macos] (this last untested).
